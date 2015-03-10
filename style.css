@@ -1,0 +1,288 @@
+body{
+	background:#000000;
+	margin:auto;
+	font-family:"Trebuchet MS", Helvetica, sans-serif;
+	color:#000000;
+}
+p{
+	font-size:12px;
+	font-weight:900;
+	color:#ffffff;
+}
+p#signature{
+	position:absolute;
+	top:565px;
+	left:600px;
+}
+input#volume{
+	width:70px;
+}
+div#volume_control{
+	position:absolute;
+	top:550px;
+	left:10px;
+	color:#ffffff;
+	width:100px;
+	height:40px;
+	font-size:12px;
+	text-align:center;
+}
+div.volume_control_in_level_editor{
+	background:#000000;
+}
+div#instr_div{
+	display:none;
+	position:absolute;
+	padding:8px;
+	background: rgba(0, 0, 0, 0.8);
+	top:312px;
+	left:92px;
+	color:#ffffff;
+	width:600px;
+	font-size:14px;
+	text-align:justify;
+}
+div#tile_select{
+	position:absolute;
+	top:10px;
+	left:700px;
+	width:60px;
+}
+div#levels{
+	display:none;
+	position:absolute;
+	top:300px;
+	left:100px;
+	width:600px;
+	height:180px;
+	font-size:14px;
+	text-align:justify;
+}
+div#custom_levels{
+	display:none;
+	position:absolute;
+	top:490px;
+	left:0px;
+	width:800px;
+	text-align:center;
+	text-shadow: -2px 0 #ffffff, 0 2px #ffffff, 2px 0 #ffffff, 0 -2px #ffffff;
+}
+input#level_code{
+	width:100px;
+}
+button#custom_play{
+	width:60px;
+	height:20px;
+	border:2px solid #8e0b86;
+	background:#ec0bcf;
+	background:linear-gradient(#ec0bcf, #eaeaea);
+	border-radius:6px;
+	font-size:12px;
+}
+button#custom_play:hover{
+	border:2px solid #0b16a7;
+	background:#24e9fb;
+	background:linear-gradient(#24e9fb, #eaeaea);
+}
+img{
+	display:none;
+}
+canvas#canv{
+	background:url("title_screen.jpg");
+}
+button.main_menu, button.instr{
+	position:absolute;
+	top:300px;
+	left:320px;
+	width:160px;
+	height:40px;
+	border:5px outset #009900;
+	border-radius:12px;
+	background:#ffff00;
+	background:linear-gradient(#ffff00, #eaeaea);
+	color:#000000;
+	font-family:inherit;
+	font-size:18px;
+}
+button.main_menu:hover, button.instr:hover{
+	border:5px inset #990000;
+	background:#0000ff;
+	background:linear-gradient(#eaeaea, #0000ff);
+	color:#ffffff;
+}
+button#instructions{
+	top:350px;
+}
+button#level_editor{
+	top:400px;
+}
+button.instr{
+	display:none;
+	top:520px;
+}
+button.level_button{
+	width:60px;
+	height:60px;
+	border:2px solid #000099;
+	border-radius:30px;
+	font-size:10px;
+}
+button.level_button:hover{
+	border:4px solid #990000;
+	border-radius:30px;
+}
+button.level_active{
+	background:#ffff00;
+	background:linear-gradient(#eaeaea, #ffff00, #999900);
+}
+button.level_cleared{
+	background:#00ff00;
+	background:linear-gradient(#eaeaea, #00ff00, #009900);
+}
+button.level_inactive{
+	background:#777777;
+	background:linear-gradient(#eaeaea, #777777, #555555);
+}
+button.editor_tile{
+	width:60px;
+	height:60px;
+	border:2px solid #000099;
+	border-radius:10px;
+	background:#999900;
+	background-repeat:no-repeat;
+	background-position:center;
+}
+button.editor_tile:hover{
+	background:#555500;
+	background-repeat:no-repeat;
+	background-position:center;
+	border:2px solid #009900;
+}
+button#start_point{
+	background-image:url("start_point.png");
+}
+button#finish_point{
+	background-image:url("finish_point.png");
+}
+button#hole{
+	background-image:url("hole.png");
+}
+button#switch{
+	background-image:url("switch.png");
+}
+button#wall{
+	background-image:url("wall.png");
+}
+button#steel_wall{
+	background-image:url("steel_wall.png");
+}
+button#door{
+	background-image:url("door.png");
+}
+button#open_door{
+	background-image:url("open_door.png");
+}
+button#floor{
+	background-image:url("floor.png");
+}
+div#selected_tile{
+	position:absolute;
+	left:630px;
+	top:10px;
+	width:60px;
+	height:60px;
+	background:#54c154;
+	background-image:url("floor.png");
+	background-repeat:no-repeat;
+	background-position:center;
+}
+div#scroll{
+	position:absolute;
+	top:50px;
+	left:10px;
+	background:#000000;
+	overflow:scroll;
+	width:600px;
+	height:420px;
+}
+canvas#editor_canv{
+	background:#ffffff;
+	background-image:url("floor.png");
+	background-repeat:repeat;
+}
+div#width_height{
+	position:absolute;
+	top:480px;
+	left:10px;
+}
+div#import_export{
+	position:absolute;
+	top:10px;
+	left:10px;
+}
+.level_editor{
+	display:none;
+}
+input.width_height{
+	width:50px;
+}
+input#map_code{
+	width:350px;
+}
+div#editor_chars{
+	display:none;
+	position:absolute;
+	top:510px;
+	left:265px;
+}
+div.editor_char{
+	float:left;
+	margin-right:5px;
+	width:40px;
+	height:40px;
+	background:#ffffff;
+	border-radius:5px;
+	text-align:center;
+}
+div#bridges{
+	background-image:url("bridges.png");
+}
+div#switches{
+	background-image:url("switches.png");
+}
+div#walls{
+	background-image:url("walls.png");
+}
+div#thrower{
+	background-image:url("thrower.png");
+}
+div#fighter{
+	background-image:url("fighter.png");
+}
+div#nothing{
+	background-image:url("nothing.png");
+}
+input.char_number{
+	width:40px;
+	height:15px;
+	background-color:rgba(255,255,255,0.8);
+	border:none;
+	position:relative;
+	top:21px;
+}
+div#chosen_doors{
+	position:absolute;
+	top:90px;
+	left:610px;
+	font-size:12px;
+	text-align:center;
+}
+button.stop_doors{
+	width:100%;
+	margin-bottom:3px;
+}
+button#test_play{
+	position:absolute;
+	top:480px;
+	left:520px;
+}
