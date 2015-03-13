@@ -1,5 +1,6 @@
 var exitGame;
 var retryGame;
+var stickNumber;
 
 function clickListener(event){
 	var rect=document.getElementById("editor_canv").getBoundingClientRect();
@@ -50,6 +51,38 @@ function actions(interval,ctx,mapNumber,map){
 	}
 }
 
+function disableZeroes(){
+	if(stickNumber[0]==0)
+		$("#bridges_game").attr("disabled",true);
+	if(stickNumber[1]==0)
+		$("#switches_game").attr("disabled",true);
+	if(stickNumber[2]==0)
+		$("#walls_game").attr("disabled",true);
+	if(stickNumber[3]==0)
+		$("#thrower_game").attr("disabled",true);
+	if(stickNumber[4]==0)
+		$("#fighter_game").attr("disabled",true);
+	if(stickNumber[5]==0)
+		$("#nothing_game").attr("disabled",true);
+}
+
+function setButtonNumbers(){
+	$("#bridges_div").html(stickNumber[0]);
+	$("#switches_div").html(stickNumber[1]);
+	$("#walls_div").html(stickNumber[2]);
+	$("#thrower_div").html(stickNumber[3]);
+	$("#fighter_div").html(stickNumber[4]);
+	$("#nothing_div").html(stickNumber[5]);
+	disableZeroes();
+}
+
+function readData(map){
+	var s=map.split(";");
+	for(var i=0;i<6;i++)
+		stickNumber[0+i]=s[3+i];
+	setButtonNumbers();
+}
+
 function play(mapNumber,map){
 	exitGame=false;
 	var interval;
@@ -61,6 +94,9 @@ function play(mapNumber,map){
 		if(mapNumber>=0)
 			map=readMap(mapNumber);
 	}
+	stickNumber=[];
+	disableAll(false);
+	readData(map);
 	var canv=document.getElementById("canv");
 	var ctx=canv.getContext("2d");
 	fill(ctx,"#ffffff");
@@ -70,6 +106,5 @@ function play(mapNumber,map){
 	$("#go_back").hide();
 	$("#signature").hide();
 	$(".in_game").show();
-	disableAll(false);
 	interval=setInterval(function(){actions(interval,ctx,mapNumber,map);},20);
 }
