@@ -1,5 +1,5 @@
 body{
-	background:#000000;
+	background:#101010;
 	margin:auto;
 	font-family:"Trebuchet MS", Helvetica, sans-serif;
 	color:#000000;
@@ -235,31 +235,32 @@ div#editor_chars{
 	top:510px;
 	left:265px;
 }
-div.editor_char{
+div.editor_char, button.char{
 	float:left;
 	margin-right:5px;
 	width:40px;
 	height:40px;
 	background:#ffffff;
+	border:none;
 	border-radius:5px;
 	text-align:center;
 }
-div#bridges{
+div#bridges, button#bridges_game{
 	background-image:url("bridges.png");
 }
-div#switches{
+div#switches, button#switches_game{
 	background-image:url("switches.png");
 }
-div#walls{
+div#walls, button#walls_game{
 	background-image:url("walls.png");
 }
-div#thrower{
+div#thrower, button#thrower_game{
 	background-image:url("thrower.png");
 }
-div#fighter{
+div#fighter, button#fighter_game{
 	background-image:url("fighter.png");
 }
-div#nothing{
+div#nothing, button#nothing_game{
 	background-image:url("nothing.png");
 }
 input.char_number{
@@ -285,4 +286,55 @@ button#test_play{
 	position:absolute;
 	top:480px;
 	left:520px;
+}
+.in_game{
+	display:none;
+}
+div#lower_panel{
+	position:absolute;
+	top:530px;
+	left:0px;
+	width:800px;
+	height:70px;
+	background:#000000;
+}
+button.game_button{
+	position:absolute;
+	top:5px;
+	left:710px;
+	width:60px;
+	height:20px;
+	background:linear-gradient(#32f532, #eaeaea);
+	border:3px solid #32b232;
+	border-radius:3px;
+	font-size:11px;
+	font-weight:bold;
+}
+button.game_button:hover{
+	width:80px;
+	height:26px;
+	font-size:13px;
+}
+button#exit{
+	top:33px;
+}
+div#chars{
+	position:absolute;
+	top:10px;
+	left:265px;
+}
+div.button_div{
+	width:30px;
+	height:15px;
+	background-color:rgba(255,255,255,0.8);
+	border:none;
+	position:relative;
+	top:12px;
+	left:0px;
+}
+button.char:disabled{
+	color:#ff0000;
+}
+.char_chosen{
+	color:#00b7b7;
 }

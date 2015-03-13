@@ -84,6 +84,30 @@
 	<audio autoplay loop id="bgMusic">
 		<!-- <source src="main_bg.mp3" type="audio/mpeg"> -->
 	</audio>
+	<div id="lower_panel" class="in_game">
+		<button class="game_button" id="exit" onclick="this.blur(); exit();">EXIT</button>
+		<button class="game_button" id="retry" onclick="this.blur(); retry();">RETRY</button>
+		<div id="chars">
+			<button class="char" id="bridges_game" onclick="this.blur();">
+				<div class="button_div" id="bridges_div">0</div>
+			</button>
+			<button class="char" id="switches_game" onclick="this.blur();">
+				<div class="button_div" id="switches_div">0</div>
+			</button>
+			<button class="char" id="walls_game" onclick="this.blur();">
+				<div class="button_div" id="walls_div">0</div>
+			</button>
+			<button class="char" id="thrower_game" onclick="this.blur();">
+				<div class="button_div" id="thrower_div">0</div>
+			</button>
+			<button class="char" id="fighter_game" onclick="this.blur();">
+				<div class="button_div" id="fighter_div">0</div>
+			</button>
+			<button class="char" id="nothing_game" onclick="this.blur();">
+				<div class="button_div" id="nothing_div">0</div>
+			</button>
+		</div>
+	</div>
 	<div class="controls" id="volume_control">
 		Volume:<br>
 		<input id="volume" type="range" min="0" max="1" step="0.01" value="1" onmouseup="changeVol();"></input>
