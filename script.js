@@ -249,11 +249,9 @@ function deletePreviousSwitch(x,y){
 	for(var i=0;i<editor_switches.length;i++){
 		if(editor_switches[i][0][0]==x && editor_switches[i][0][1]==y){
 			editor_switches.splice(i,1);
-			alert(editor_switches.length+" found");
 			return;
 		}
 	}
-	alert(editor_switches.length);
 }
 function editorClick(event){
 	var rect=document.getElementById("editor_canv").getBoundingClientRect();

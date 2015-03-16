@@ -2,6 +2,10 @@ var exitGame;
 var retryGame;
 var stickNumber;
 
+var map_width,map_height;
+var switches;
+var map;
+
 function clickListener(event){
 	var rect=document.getElementById("editor_canv").getBoundingClientRect();
 	var x=Math.floor((event.pageX-rect.left)/40);	//+costam
@@ -76,11 +80,44 @@ function setButtonNumbers(){
 	disableZeroes();
 }
 
+function handleSwitchAdding(tile,x,y,w){
+	var arr=[];
+	arr[0]=[];
+	arr[0][0]=x;
+	arr[0][1]=y;
+	for(var i=2;i<tile.length-1;i++){
+		arr[i-1]=[];
+		arr[i-1][0]=tile[i]%w;
+		arr[i-1][1]=Math.floor(tile[i]/w);
+	}
+	switches.push(arr);
+}
+
+function putTileOnMap(tile,map,w){
+	var x,y;
+	y=Math.floor(tile[0]/w);
+	x=tile[0]%w;
+	map[x][y]=tile[1];
+	if(tile[1]==12)
+		handleSwitchAdding(tile,x,y,w);
+}
+
 function readData(map){
 	var s=map.split(";");
 	for(var i=0;i<6;i++)
 		stickNumber[0+i]=s[3+i];
 	setButtonNumbers();
+	map_width=s[0];
+	map_height=s[1];
+	map=[];
+	for(var x=0;x<map_width;x++){
+		map[x]=[];
+		for(var y=0;y<map_height;y++)
+			map[x][y]=0;
+	}
+	switches=[];
+	for(var i=9;i<s.length-1;i++)
+		putTileOnMap(s[i].split(","),map,map_width);
 }
 
 function play(mapNumber,map){
