@@ -26,3 +26,23 @@ function readMap(mapNumber){
 	});
 	return map;
 }
+function getTileName(tile){
+	if(tile==0)
+		return "floor";
+	if(tile==1)
+		return "start_point";
+	if(tile==2)
+		return "finish_point";
+	if(tile==3)
+		return "open_door"
+	if(tile==10)
+		return "wall";
+	if(tile==11)
+		return "steel_wall";
+	if(tile==12)
+		return "switch";
+	if(tile==13)
+		return "door";
+	if(tile==14)
+		return "hole";
+}

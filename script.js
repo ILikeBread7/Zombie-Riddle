@@ -142,24 +142,6 @@ function putStart(start){
 	img=document.getElementById("start_point_img");
 	ctx.drawImage(img,x*40,y*40);
 }
-function getTileName(tile){
-	if(tile==0)
-		return "floor";
-	if(tile==2)
-		return "finish_point";
-	if(tile==3)
-		return "open_door"
-	if(tile==10)
-		return "wall";
-	if(tile==11)
-		return "steel_wall";
-	if(tile==12)
-		return "switch";
-	if(tile==13)
-		return "door";
-	if(tile==14)
-		return "hole";
-}
 function addSwitch(data){
 	var switchArr=[];
 	var x,y;
@@ -349,6 +331,7 @@ function addLevels(levels){
 function init(){
 	var canv=document.getElementById("canv");
 	canv.addEventListener("click",clickListener);
+	document.addEventListener("keydown",keyListener);
 	var ctx=canv.getContext("2d");
 	//document.cookie="cleared=3; expires=19 Jan 2038 03:14:07 UTC";
 	var cookies=document.cookie;

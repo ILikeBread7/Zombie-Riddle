@@ -4,14 +4,28 @@ var stickNumber;
 
 var map_width,map_height;
 var switches;
+var map_code;
 var map;
+
+var player_x;
+var player_y;
 
 function clickListener(event){
 	var rect=document.getElementById("editor_canv").getBoundingClientRect();
 	var x=Math.floor((event.pageX-rect.left)/40);	//+costam
 	var y=Math.floor((event.pageY-rect.top)/40); //+costam
 }
-
+function keyListener(event){
+	if(exitGame==false){
+		var key=event.keyCode;
+		switch(key){
+			case 38: player_y--; break;
+			case 40: player_y++; break;
+			case 37: player_x--; break;
+			case 39: player_x++; break;
+		}
+	}
+}
 function exit(){
 	$(".in_game").hide();
 	exitGame=true;
@@ -30,11 +44,29 @@ function disableAll(disable){
 	$("#nothing_game").attr("disabled",disable);
 }
 
-function actions(interval,ctx,mapNumber,map){
+function showTile(ctx,map,x,y){
+	if(x>=0 && x<map_width && y>=0 && y<map_height){
+		var img=document.getElementById(getTileName(map[x][y])+"_img");
+		ctx.drawImage(img,400+(x-player_x)*40,260+(y-player_y)*40);
+	}
+}
+function showPlayer(ctx){
+	var img=document.getElementById("player_0_img");
+	ctx.drawImage(img,400,260);
+}
+function playFrame(ctx,map){
+	fill(ctx,"#ffffff");
+	for(var x=player_x-10;x<player_x+10;x++)
+		for(var y=player_y-7;y<player_y+7;y++)
+			showTile(ctx,map,x,y);
+	showPlayer(ctx);
+}
+
+function actions(interval,ctx,mapNumber,map_code){
 	if(retryGame){
 		retryGame=false;
 		clearInterval(interval);
-		play(mapNumber,map);
+		play(mapNumber,map_code);
 	}
 	if(exitGame){
 		clearInterval(interval);
@@ -53,6 +85,8 @@ function actions(interval,ctx,mapNumber,map){
 		}
 		$("#go_back").show();
 	}
+	else
+		playFrame(ctx,map);
 }
 
 function disableZeroes(){
@@ -101,9 +135,16 @@ function putTileOnMap(tile,map,w){
 	if(tile[1]==12)
 		handleSwitchAdding(tile,x,y,w);
 }
-
-function readData(map){
-	var s=map.split(";");
+function putStartOnMap(map,num,map_width){
+	var x=Math.floor(num%map_width);
+	var y=Math.floor(num/map_width);
+	map[x][y]=1;
+	player_x=x;
+	player_y=y;
+}
+function readData(map_code){
+	var map;
+	var s=map_code.split(";");
 	for(var i=0;i<6;i++)
 		stickNumber[0+i]=s[3+i];
 	setButtonNumbers();
@@ -115,25 +156,29 @@ function readData(map){
 		for(var y=0;y<map_height;y++)
 			map[x][y]=0;
 	}
+	putStartOnMap(map,s[2],map_width);
 	switches=[];
 	for(var i=9;i<s.length-1;i++)
 		putTileOnMap(s[i].split(","),map,map_width);
+	return map;
 }
 
-function play(mapNumber,map){
+function play(mapNumber,map_code){
 	exitGame=false;
 	var interval;
-	if(map==undefined){
+	if(map_code==undefined){
 		if(mapNumber==-1)
-			map=exportedMapCode();
+			map_code=exportedMapCode();
 		if(mapNumber==-2)
-			map=$("#level_code").val();
+			map_code=$("#level_code").val();
 		if(mapNumber>=0)
-			map=readMap(mapNumber);
+			map_code=readMap(mapNumber);
 	}
+	player_x=0;
+	player_y=0;
 	stickNumber=[];
 	disableAll(false);
-	readData(map);
+	map=readData(map_code);
 	var canv=document.getElementById("canv");
 	var ctx=canv.getContext("2d");
 	fill(ctx,"#ffffff");
@@ -143,5 +188,5 @@ function play(mapNumber,map){
 	$("#go_back").hide();
 	$("#signature").hide();
 	$(".in_game").show();
-	interval=setInterval(function(){actions(interval,ctx,mapNumber,map);},20);
+	interval=setInterval(function(){actions(interval,ctx,mapNumber,map,map_code);},20);
 }
