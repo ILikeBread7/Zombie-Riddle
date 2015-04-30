@@ -1,7 +1,16 @@
+function drawRotatedImage(ctx,img,x,y,degree){
+		ctx.save();
+		ctx.translate(x+img.width/2,y+img.height/2);
+		ctx.rotate(degree);
+		ctx.drawImage(img,-img.width/2,-img.height/2);
+		ctx.restore();
+	}
+
 function fill(ctx,color){
 	ctx.fillStyle=color;
 	ctx.fillRect(0,0,800,600);
 }
+
 function exportedMapCode(){
 	var s=editor_map_width+";"+editor_map_height+";"+findStart()+";";
 	s+=$("#bridges_input").val()+";";

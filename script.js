@@ -330,7 +330,7 @@ function addLevels(levels){
 }
 function init(){
 	var canv=document.getElementById("canv");
-	canv.addEventListener("click",clickListener);
+	canv.addEventListener("mousemove",mouseMoveListener);
 	document.addEventListener("keydown",keyListener);
 	var ctx=canv.getContext("2d");
 	//document.cookie="cleared=3; expires=19 Jan 2038 03:14:07 UTC";

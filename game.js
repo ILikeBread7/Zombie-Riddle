@@ -7,13 +7,24 @@ var switches;
 var map_code;
 var map;
 
+var mouse_x;
+var mouse_y;
+var map_mouse_x;
+var map_mouse_y;
+
+var PLAYER_ABSOLUTE_X=400;
+var PLAYER_ABSOLUTE_Y=260;
+
 var player_x;
 var player_y;
+var player_angle;
 
-function clickListener(event){
+function mouseMoveListener(event){
 	var rect=document.getElementById("editor_canv").getBoundingClientRect();
-	var x=Math.floor((event.pageX-rect.left)/40);	//+costam
-	var y=Math.floor((event.pageY-rect.top)/40); //+costam
+	mouse_x=event.pageX-rect.left;
+	mouse_y=event.pageY-rect.top;
+	map_mouse_x=Math.floor((mouse_x)/40);	//+costam
+	map_mouse_y=Math.floor((mouse_y)/40); //+costam
 }
 function keyListener(event){
 	if(exitGame==false){
@@ -52,13 +63,24 @@ function showTile(ctx,map,x,y){
 }
 function showPlayer(ctx){
 	var img=document.getElementById("player_0_img");
-	ctx.drawImage(img,400,260);
+	//ctx.drawImage(img,400,260);
+	drawRotatedImage(ctx,img,PLAYER_ABSOLUTE_X,PLAYER_ABSOLUTE_Y,player_angle);
+}
+function decidePlayerAngle(){
+	var x=mouse_x-PLAYER_ABSOLUTE_X;
+	var y=mouse_y-PLAYER_ABSOLUTE_Y;
+	var sinAlpha=x/(Math.sqrt(x*x+y*y));
+	if(y<=0)
+		player_angle=Math.asin(sinAlpha);
+	else
+		player_angle=Math.PI-Math.asin(sinAlpha);
 }
 function playFrame(ctx,map){
 	fill(ctx,"#ffffff");
 	for(var x=player_x-10;x<player_x+10;x++)
 		for(var y=player_y-7;y<player_y+7;y++)
 			showTile(ctx,map,x,y);
+	decidePlayerAngle();
 	showPlayer(ctx);
 }
 
@@ -176,6 +198,7 @@ function play(mapNumber,map_code){
 	}
 	player_x=0;
 	player_y=0;
+	player_angle=0;
 	stickNumber=[];
 	disableAll(false);
 	map=readData(map_code);
