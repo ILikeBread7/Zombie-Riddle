@@ -15,9 +15,56 @@ var map_mouse_y;
 var PLAYER_ABSOLUTE_X=400;
 var PLAYER_ABSOLUTE_Y=260;
 
-var player_x;
-var player_y;
-var player_angle;
+var player=function(){
+	var player_x;
+	var player_y;
+	var player_angle;
+	var speed;
+	return{
+		init:function(x,y){
+			player_x=x*40 || 0;
+			player_y=y*40 || 0;
+			player_angle=0;
+			speed=10;
+		},
+		getX:function(){
+			return Math.floor(player_x/40);
+		},
+		getY:function(){
+			return Math.floor(player_y/40);
+		},
+		getRealX:function(){
+			return player_x/40;
+		},
+		getRealY:function(){
+			return player_y/40;
+		},
+		getAngle:function(){
+			return player_angle;
+		},
+		move:function(dir){
+			if(dir==0){	//0=UP
+				player_y-=speed*Math.cos(player_angle);
+				player_x+=speed*Math.sin(player_angle);
+			}
+			else if(dir==1){	//1=DOWN
+				player_y+=speed*Math.cos(player_angle);
+				player_x-=speed*Math.sin(player_angle);
+			}
+			else if(dir==2){	//2=LEFT
+				player_y-=speed*Math.cos(player_angle-Math.PI/2);
+				player_x+=speed*Math.sin(player_angle-Math.PI/2);
+			}
+			else if(dir==3){	//3=RIGHT
+				player_y-=speed*Math.cos(player_angle+Math.PI/2);
+				player_x+=speed*Math.sin(player_angle+Math.PI/2);
+			}
+		},
+		setAngle:function(angle){
+			player_angle=angle;
+		}
+	}
+}();
 
 function mouseMoveListener(event){
 	var rect=document.getElementById("editor_canv").getBoundingClientRect();
@@ -30,10 +77,18 @@ function keyListener(event){
 	if(exitGame==false){
 		var key=event.keyCode;
 		switch(key){
-			case 38: player_y--; break;
-			case 40: player_y++; break;
-			case 37: player_x--; break;
-			case 39: player_x++; break;
+			/*case 38: player.incY(false); break;
+			case 40: player.incY(true); break;
+			case 37: player.incX(false); break;
+			case 39: player.incX(true); break;*/
+			case 38: player.move(0); break;
+			case 87: player.move(0); break;
+			case 40: player.move(1); break;
+			case 83: player.move(1); break;
+			case 65: player.move(2); break;
+			case 37: player.move(2); break;
+			case 68: player.move(3); break;
+			case 39: player.move(3); break;
 		}
 	}
 }
@@ -58,27 +113,27 @@ function disableAll(disable){
 function showTile(ctx,map,x,y){
 	if(x>=0 && x<map_width && y>=0 && y<map_height){
 		var img=document.getElementById(getTileName(map[x][y])+"_img");
-		ctx.drawImage(img,400+(x-player_x)*40,260+(y-player_y)*40);
+		ctx.drawImage(img,400+(x-player.getRealX())*40,260+(y-player.getRealY())*40);
 	}
 }
 function showPlayer(ctx){
 	var img=document.getElementById("player_0_img");
 	//ctx.drawImage(img,400,260);
-	drawRotatedImage(ctx,img,PLAYER_ABSOLUTE_X,PLAYER_ABSOLUTE_Y,player_angle);
+	drawRotatedImage(ctx,img,PLAYER_ABSOLUTE_X,PLAYER_ABSOLUTE_Y,player.getAngle());
 }
 function decidePlayerAngle(){
 	var x=mouse_x-PLAYER_ABSOLUTE_X;
 	var y=mouse_y-PLAYER_ABSOLUTE_Y;
 	var sinAlpha=x/(Math.sqrt(x*x+y*y));
 	if(y<=0)
-		player_angle=Math.asin(sinAlpha);
+		player.setAngle(Math.asin(sinAlpha));
 	else
-		player_angle=Math.PI-Math.asin(sinAlpha);
+		player.setAngle(Math.PI-Math.asin(sinAlpha));
 }
 function playFrame(ctx,map){
 	fill(ctx,"#ffffff");
-	for(var x=player_x-10;x<player_x+10;x++)
-		for(var y=player_y-7;y<player_y+7;y++)
+	for(var x=player.getX()-10;x<player.getX()+11;x++)
+		for(var y=player.getY()-7;y<player.getY()+8;y++)
 			showTile(ctx,map,x,y);
 	decidePlayerAngle();
 	showPlayer(ctx);
@@ -161,8 +216,7 @@ function putStartOnMap(map,num,map_width){
 	var x=Math.floor(num%map_width);
 	var y=Math.floor(num/map_width);
 	map[x][y]=1;
-	player_x=x;
-	player_y=y;
+	player.init(x,y);
 }
 function readData(map_code){
 	var map;
@@ -196,9 +250,7 @@ function play(mapNumber,map_code){
 		if(mapNumber>=0)
 			map_code=readMap(mapNumber);
 	}
-	player_x=0;
-	player_y=0;
-	player_angle=0;
+	player.init();
 	stickNumber=[];
 	disableAll(false);
 	map=readData(map_code);
