@@ -20,12 +20,14 @@ var player=function(){
 	var player_y;
 	var player_angle;
 	var speed;
+	var player_tmp_x;
+	var player_tmp_y;
 	return{
 		init:function(x,y){
-			player_x=x*40 || 0;
-			player_y=y*40 || 0;
+			player_tmp_x=player_x=x*40 || 0;
+			player_tmp_y=player_y=y*40 || 0;
 			player_angle=0;
-			speed=10;
+			speed=3;
 		},
 		getX:function(){
 			return Math.floor(player_x/40);
@@ -42,13 +44,27 @@ var player=function(){
 		getAngle:function(){
 			return player_angle;
 		},
-		move:function(dir){
+		decideMovement:function(dir){
 			//dir: 0=UP 1=RIGHT 2=DOWN 3=LEFT
-			player_y-=speed*Math.cos(player_angle+dir/2*Math.PI);
-			player_x+=speed*Math.sin(player_angle+dir/2*Math.PI);
+			player_tmp_y=player_y-speed*Math.cos(player_angle+dir/2*Math.PI);
+			player_tmp_x=player_x+speed*Math.sin(player_angle+dir/2*Math.PI);
+		},
+		move:function(){
+			player_y=player_tmp_y;
+			player_x=player_tmp_x;
 		},
 		setAngle:function(angle){
 			player_angle=angle;
+		},
+		
+		getTmpCenterX:function(){
+			return player_tmp_x+20;
+		},
+		getTmpCenterY:function(){
+			return player_tmp_y+20;
+		},
+		getRadius:function(){
+			return 18;
 		}
 	}
 }();
@@ -66,16 +82,16 @@ function keyListener(event){
 		switch(key){
 			case 38:
 			case 87:
-				player.move(0); break;
+				player.decideMovement(0); break;
 			case 40:
 			case 83:
-				player.move(2); break;
+				player.decideMovement(2); break;
 			case 65:
 			case 37:
-				player.move(3); break;
+				player.decideMovement(3); break;
 			case 68:
 			case 39:
-				player.move(1); break;
+				player.decideMovement(1); break;
 		}
 	}
 }
@@ -117,12 +133,32 @@ function decidePlayerAngle(){
 	else
 		player.setAngle(Math.PI-Math.asin(sinAlpha));
 }
+
+function collision(player,zombies,map){
+	var r=player.getRadius();
+	var x=player.getTmpCenterX();
+	var y=player.getTmpCenterY();
+	var x_left=Math.floor((x-r)/40);
+	var x_right=Math.floor((x+r)/40);
+	var y_up=Math.floor((y-r)/40);
+	var y_down=Math.floor((y+r)/40);
+	if(x_left<0 || x_right>=map_width || y_up<0 || y_down>=map_height)
+		return true;
+	if(map[x_left][y_up]>=10 || map[x_right][y_up]>=10 || map[x_left][y_down]>=10 || map[x_right][y_down]>=10)	// everything you can walk on has a code lowe than 10
+		return true;
+	return false;
+}
+
 function playFrame(ctx,map){
 	fill(ctx,"#ffffff");
 	for(var x=player.getX()-10;x<player.getX()+11;x++)
 		for(var y=player.getY()-7;y<player.getY()+8;y++)
 			showTile(ctx,map,x,y);
 	decidePlayerAngle();
+	if(collision(player,null,map))
+		console.log("collision!!!");
+	else
+		player.move();
 	showPlayer(ctx);
 }
 
