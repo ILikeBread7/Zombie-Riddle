@@ -43,22 +43,9 @@ var player=function(){
 			return player_angle;
 		},
 		move:function(dir){
-			if(dir==0){	//0=UP
-				player_y-=speed*Math.cos(player_angle);
-				player_x+=speed*Math.sin(player_angle);
-			}
-			else if(dir==1){	//1=DOWN
-				player_y+=speed*Math.cos(player_angle);
-				player_x-=speed*Math.sin(player_angle);
-			}
-			else if(dir==2){	//2=LEFT
-				player_y-=speed*Math.cos(player_angle-Math.PI/2);
-				player_x+=speed*Math.sin(player_angle-Math.PI/2);
-			}
-			else if(dir==3){	//3=RIGHT
-				player_y-=speed*Math.cos(player_angle+Math.PI/2);
-				player_x+=speed*Math.sin(player_angle+Math.PI/2);
-			}
+			//dir: 0=UP 1=RIGHT 2=DOWN 3=LEFT
+			player_y-=speed*Math.cos(player_angle+dir/2*Math.PI);
+			player_x+=speed*Math.sin(player_angle+dir/2*Math.PI);
 		},
 		setAngle:function(angle){
 			player_angle=angle;
@@ -77,18 +64,18 @@ function keyListener(event){
 	if(exitGame==false){
 		var key=event.keyCode;
 		switch(key){
-			/*case 38: player.incY(false); break;
-			case 40: player.incY(true); break;
-			case 37: player.incX(false); break;
-			case 39: player.incX(true); break;*/
-			case 38: player.move(0); break;
-			case 87: player.move(0); break;
-			case 40: player.move(1); break;
-			case 83: player.move(1); break;
-			case 65: player.move(2); break;
-			case 37: player.move(2); break;
-			case 68: player.move(3); break;
-			case 39: player.move(3); break;
+			case 38:
+			case 87:
+				player.move(0); break;
+			case 40:
+			case 83:
+				player.move(2); break;
+			case 65:
+			case 37:
+				player.move(3); break;
+			case 68:
+			case 39:
+				player.move(1); break;
 		}
 	}
 }
