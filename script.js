@@ -332,6 +332,7 @@ function init(){
 	var canv=document.getElementById("canv");
 	canv.addEventListener("mousemove",mouseMoveListener);
 	document.addEventListener("keydown",keyListener);
+	document.addEventListener("keyup",keyListener);
 	var ctx=canv.getContext("2d");
 	//document.cookie="cleared=3; expires=19 Jan 2038 03:14:07 UTC";
 	var cookies=document.cookie;

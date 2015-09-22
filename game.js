@@ -45,9 +45,15 @@ var player=function(){
 			return player_angle;
 		},
 		decideMovement:function(dir){
-			//dir: 0=UP 1=RIGHT 2=DOWN 3=LEFT
-			player_tmp_y=player_y-speed*Math.cos(player_angle+dir/2*Math.PI);
-			player_tmp_x=player_x+speed*Math.sin(player_angle+dir/2*Math.PI);
+			if(dir==-1){
+				player_tmp_y=player_y;
+				player_tmp_x=player_x;
+			}
+			else{
+				//dir: 0=UP 1=RIGHT 2=DOWN 3=LEFT
+				player_tmp_y=player_y-speed*Math.cos(player_angle+dir/2*Math.PI);
+				player_tmp_x=player_x+speed*Math.sin(player_angle+dir/2*Math.PI);
+			}
 		},
 		move:function(){
 			player_y=player_tmp_y;
@@ -77,23 +83,10 @@ function mouseMoveListener(event){
 	map_mouse_y=Math.floor((mouse_y)/40); //+costam
 }
 function keyListener(event){
-	if(exitGame==false){
-		var key=event.keyCode;
-		switch(key){
-			case 38:
-			case 87:
-				player.decideMovement(0); break;
-			case 40:
-			case 83:
-				player.decideMovement(2); break;
-			case 65:
-			case 37:
-				player.decideMovement(3); break;
-			case 68:
-			case 39:
-				player.decideMovement(1); break;
-		}
-	}
+	if(event.type=='keydown')
+		controls.setPressed(event.keyCode);
+	else if(event.type=='keyup')
+		controls.setReleased(event.keyCode);
 }
 function exit(){
 	$(".in_game").hide();
@@ -142,9 +135,10 @@ function collision(player,zombies,map){
 	var x_right=Math.floor((x+r)/40);
 	var y_up=Math.floor((y-r)/40);
 	var y_down=Math.floor((y+r)/40);
+	
 	if(x_left<0 || x_right>=map_width || y_up<0 || y_down>=map_height)
 		return true;
-	if(map[x_left][y_up]>=10 || map[x_right][y_up]>=10 || map[x_left][y_down]>=10 || map[x_right][y_down]>=10)	// everything you can walk on has a code lowe than 10
+	if(map[x_left][y_up]>=10 || map[x_right][y_up]>=10 || map[x_left][y_down]>=10 || map[x_right][y_down]>=10)	// everything you can walk on has a code lower than 10
 		return true;
 	return false;
 }
@@ -155,6 +149,7 @@ function playFrame(ctx,map){
 		for(var y=player.getY()-7;y<player.getY()+8;y++)
 			showTile(ctx,map,x,y);
 	decidePlayerAngle();
+	player.decideMovement(controls.direction());
 	if(collision(player,null,map))
 		console.log("collision!!!");
 	else
