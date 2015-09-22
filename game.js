@@ -22,6 +22,9 @@ var player=function(){
 	var speed;
 	var player_tmp_x;
 	var player_tmp_y;
+	
+	var movable=[true,true,true,true];
+	
 	return{
 		init:function(x,y){
 			player_tmp_x=player_x=x*40 || 0;
@@ -55,9 +58,16 @@ var player=function(){
 				player_tmp_x=player_x+speed*Math.sin(player_angle+dir/2*Math.PI);
 			}
 		},
+		setMovable:function(arr){
+			movable=arr;
+		},
 		move:function(){
-			player_y=player_tmp_y;
-			player_x=player_tmp_x;
+			var changeX=player_tmp_x-player_x;
+			var changeY=player_tmp_y-player_y;
+			if((changeX>0 && movable[1]) || (changeX<0 && movable[3]))
+				player_x=player_tmp_x;
+			if((changeY>0 && movable[2]) || (changeY<0 && movable[0]))
+				player_y=player_tmp_y;
 		},
 		setAngle:function(angle){
 			player_angle=angle;
@@ -70,7 +80,7 @@ var player=function(){
 			return player_tmp_y+20;
 		},
 		getRadius:function(){
-			return 18;
+			return 15;
 		}
 	}
 }();
@@ -127,7 +137,15 @@ function decidePlayerAngle(){
 		player.setAngle(Math.PI-Math.asin(sinAlpha));
 }
 
-function collision(player,zombies,map){
+function getCollidingSquare(x,y){	
+	if(y<0 || x<0 || x>=map_width || y>=map_height)
+		return createSquare(x,y);
+	if(map[x][y]<10)
+		return null;
+	return createSquare(x,y);
+}
+
+function collision(player,map){
 	var r=player.getRadius();
 	var x=player.getTmpCenterX();
 	var y=player.getTmpCenterY();
@@ -136,11 +154,16 @@ function collision(player,zombies,map){
 	var y_up=Math.floor((y-r)/40);
 	var y_down=Math.floor((y+r)/40);
 	
-	if(x_left<0 || x_right>=map_width || y_up<0 || y_down>=map_height)
-		return true;
-	if(map[x_left][y_up]>=10 || map[x_right][y_up]>=10 || map[x_left][y_down]>=10 || map[x_right][y_down]>=10)	// everything you can walk on has a code lower than 10
-		return true;
-	return false;
+	var squares=[];
+	squares.push(getCollidingSquare(x_left,y_up));
+	squares.push(getCollidingSquare(x_left,y_down));
+	squares.push(getCollidingSquare(x_right,y_down));
+	squares.push(getCollidingSquare(x_right,y_up));
+	squares=squares.filter(function(a){
+		return a!=null;
+	});
+	
+	player.setMovable(squareCollisions(squares,x,y,r));
 }
 
 function playFrame(ctx,map){
@@ -150,10 +173,8 @@ function playFrame(ctx,map){
 			showTile(ctx,map,x,y);
 	decidePlayerAngle();
 	player.decideMovement(controls.direction());
-	if(collision(player,null,map))
-		console.log("collision!!!");
-	else
-		player.move();
+	collision(player,map);
+	player.move();
 	showPlayer(ctx);
 }
 
