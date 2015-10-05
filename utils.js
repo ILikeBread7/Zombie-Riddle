@@ -43,7 +43,9 @@ function getTileName(tile){
 	if(tile==2)
 		return "finish_point";
 	if(tile==3)
-		return "open_door"
+		return "open_door";
+	if(tile==4)
+		return "bridge";
 	if(tile==10)
 		return "wall";
 	if(tile==11)

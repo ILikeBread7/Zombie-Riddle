@@ -233,7 +233,7 @@ div#editor_chars{
 	display:none;
 	position:absolute;
 	top:510px;
-	left:265px;
+	left:290px;
 }
 div.editor_char, button.char{
 	float:left;

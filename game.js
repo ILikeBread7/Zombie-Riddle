@@ -23,14 +23,28 @@ var player=function(){
 	var player_tmp_x;
 	var player_tmp_y;
 	
+	var start_x;
+	var start_y;
+	
+	var in_play;
+	var stickman_type;
+	
 	var movable=[true,true,true,true];
+	
+	putAtStart=function(){
+			player_tmp_x=player_x=start_x*40 || 0;
+			player_tmp_y=player_y=start_y*40 || 0;
+			player_angle=0;
+	};
 	
 	return{
 		init:function(x,y){
-			player_tmp_x=player_x=x*40 || 0;
-			player_tmp_y=player_y=y*40 || 0;
-			player_angle=0;
+			stickman_type=0;
+			start_x=x;
+			start_y=y;
+			putAtStart();
 			speed=3;
+			in_play=false;
 		},
 		getX:function(){
 			return Math.floor(player_x/40);
@@ -81,6 +95,25 @@ var player=function(){
 		},
 		getRadius:function(){
 			return 15;
+		},
+		isInPlay:function(){
+			return in_play;
+		},
+		setInPlay:function(val){
+			in_play=val;
+			putAtStart();
+		},
+		setType:function(num){
+			stickman_type=num;
+		},
+		getType:function(){
+			return stickman_type;
+		},		
+		getTargetX:function(){
+			return this.getRealX()+0.5+0.85*Math.sin(player_angle);
+		},
+		getTargetY:function(){
+			return this.getRealY()+0.5-0.85*Math.cos(player_angle);
 		}
 	}
 }();
@@ -123,8 +156,8 @@ function showTile(ctx,map,x,y){
 	}
 }
 function showPlayer(ctx){
-	var img=document.getElementById("player_0_img");
-	//ctx.drawImage(img,400,260);
+	var s="player_"+player.getType()+"_img";
+	var img=document.getElementById(s);
 	drawRotatedImage(ctx,img,PLAYER_ABSOLUTE_X,PLAYER_ABSOLUTE_Y,player.getAngle());
 }
 function decidePlayerAngle(){
@@ -171,14 +204,16 @@ function playFrame(ctx,map){
 	for(var x=player.getX()-10;x<player.getX()+11;x++)
 		for(var y=player.getY()-7;y<player.getY()+8;y++)
 			showTile(ctx,map,x,y);
-	decidePlayerAngle();
-	player.decideMovement(controls.direction());
-	collision(player,map);
-	player.move();
-	showPlayer(ctx);
+	if(player.isInPlay()){
+		decidePlayerAngle();
+		player.decideMovement(controls.direction());
+		collision(player,map);
+		player.move();
+		showPlayer(ctx);
+	}
 }
 
-function actions(interval,ctx,mapNumber,map_code){
+function actions(interval,ctx,mapNumber,map,map_code){
 	if(retryGame){
 		retryGame=false;
 		clearInterval(interval);
@@ -276,6 +311,56 @@ function readData(map_code){
 	for(var i=9;i<s.length-1;i++)
 		putTileOnMap(s[i].split(","),map,map_width);
 	return map;
+}
+
+function sendStickman(num){
+	stickNumber[num]--;
+	setButtonNumbers();
+	player.setType(num);
+	player.setInPlay(true);
+}
+
+function getTile(x,y){
+	if(x>=0 && x<map_width && y>=0 && y<map_height)
+		return map[x][y];
+	return null;
+}
+
+function handleSwitchPress(x,y){
+	for(var i=0;i<switches.length;i++){
+		if(switches[i][0][0]==x && switches[i][0][1]==y){
+			for(var j=1;j<switches[i].length;j++){
+				var doorX=switches[i][j][0];
+				var doorY=switches[i][j][1];
+				var tile=getTile(doorX,doorY);
+				if(tile!=null && tile%10==3){
+					map[doorX][doorY]=parseInt(tile)+10;
+					map[doorX][doorY]%=20;
+				}
+			}
+		}
+	}
+}
+
+function gameClickListener(){
+	if(player!=undefined && player.isInPlay()){
+		var tileX=Math.floor(player.getTargetX());
+		var tileY=Math.floor(player.getTargetY());
+		
+		var tile=getTile(tileX,tileY);
+		if(tile!=null){
+			if(tile==14 && player.getType()==0 ||
+			tile==10 && player.getType()==2){
+				map[tileX][tileY]-=10;
+				player.setInPlay(false);
+			}
+			
+			if(tile==12 && player.getType()==1){
+				handleSwitchPress(tileX,tileY);
+				player.setInPlay(false);
+			}
+		}
+	}
 }
 
 function play(mapNumber,map_code){
