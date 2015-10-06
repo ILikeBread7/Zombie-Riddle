@@ -16,7 +16,8 @@ function exportedMapCode(){
 	s+=$("#bridges_input").val()+";";
 	s+=$("#switches_input").val()+";";
 	s+=$("#walls_input").val()+";";
-	s+=$("#thrower_input").val()+";";
+	//s+=$("#thrower_input").val()+";";
+	s+="0;";
 	s+=$("#fighter_input").val()+";";
 	s+=$("#nothing_input").val()+";";
 	s+=encodeTiles();

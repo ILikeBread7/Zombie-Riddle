@@ -42,6 +42,25 @@ div#instr_div{
 	font-size:14px;
 	text-align:justify;
 }
+div#win_div{
+	display:none;
+	position:absolute;
+	padding:8px;
+	background: rgba(0, 0, 0, 0.8);
+	top:400px;
+	left:192px;
+	color:#ffffff;
+	width:400px;
+	font-size:32px;
+	text-align:center;
+}
+div#level_text{
+	color:#ffffff;
+	position:relative;
+	top:10px;
+	left:540px;
+	width:100px;
+}
 div#tile_select{
 	position:absolute;
 	top:10px;
@@ -314,6 +333,21 @@ button.game_button:hover{
 	width:80px;
 	height:26px;
 	font-size:13px;
+}
+button.win_button{
+	width:80px;
+	height:25px;
+	background:linear-gradient(#a9a912, #434343);
+	border:3px solid #959545;
+	border-radius:3px;
+	font-size:13px;
+	font-style:italic;
+	color:#ffffff;
+}
+button.win_button:hover{
+	width:90px;
+	height:28px;
+	font-size:15px;
 }
 button#exit{
 	top:33px;

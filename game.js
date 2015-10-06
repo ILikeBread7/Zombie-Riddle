@@ -1,5 +1,10 @@
+var cleared;
+var levels;
+
 var exitGame;
 var retryGame;
+var endGame;
+var nextLevel;
 var stickNumber;
 
 var map_width,map_height;
@@ -20,6 +25,7 @@ var player=function(){
 	var player_y;
 	var player_angle;
 	var speed;
+	var scroll_speed;
 	var player_tmp_x;
 	var player_tmp_y;
 	
@@ -44,6 +50,7 @@ var player=function(){
 			start_y=y;
 			putAtStart();
 			speed=3;
+			scroll_speed=10;
 			in_play=false;
 		},
 		getX:function(){
@@ -93,6 +100,12 @@ var player=function(){
 		getTmpCenterY:function(){
 			return player_tmp_y+20;
 		},
+		getCenterX:function(){
+			return player_x+20;
+		},
+		getCenterY:function(){
+			return player_y+20;
+		},
 		getRadius:function(){
 			return 15;
 		},
@@ -101,7 +114,8 @@ var player=function(){
 		},
 		setInPlay:function(val){
 			in_play=val;
-			putAtStart();
+			if(val==true)
+				putAtStart();
 		},
 		setType:function(num){
 			stickman_type=num;
@@ -114,9 +128,30 @@ var player=function(){
 		},
 		getTargetY:function(){
 			return this.getRealY()+0.5-0.85*Math.cos(player_angle);
+		},
+		moveTowardsStart:function(){
+			if(player_x/40<start_x)
+				player_x+=scroll_speed;
+			else
+				player_x-=scroll_speed;
+			if(Math.abs(player_x-start_x*40)<=scroll_speed)
+				player_x=start_x*40;
+			
+			if(player_y/40<start_y)
+				player_y+=scroll_speed;
+			else
+				player_y-=scroll_speed;
+			if(Math.abs(player_y-start_y*40)<=scroll_speed)
+				player_y=start_y*40;
 		}
 	}
 }();
+
+function getTile(x,y){
+	if(x>=0 && x<map_width && y>=0 && y<map_height)
+		return map[x][y];
+	return null;
+}
 
 function mouseMoveListener(event){
 	var rect=document.getElementById("editor_canv").getBoundingClientRect();
@@ -133,10 +168,12 @@ function keyListener(event){
 }
 function exit(){
 	$(".in_game").hide();
+	$("#win_div").hide();
 	exitGame=true;
 }
 
 function retry(){
+	$("#win_div").hide();
 	retryGame=true;
 }
 
@@ -199,6 +236,19 @@ function collision(player,map){
 	player.setMovable(squareCollisions(squares,x,y,r));
 }
 
+function playerOnFinish(player){
+	var x=player.getCenterX()/40;
+	var y=player.getCenterY()/40;
+	
+	if(getTile(Math.floor(x),Math.floor(y))!=2)
+		return false;
+	
+	var xDist=x%1-0.5;
+	var yDist=y%1-0.5;
+	
+	return (Math.sqrt(xDist*xDist+yDist*yDist)<0.4);
+}
+
 function playFrame(ctx,map){
 	fill(ctx,"#ffffff");
 	for(var x=player.getX()-10;x<player.getX()+11;x++)
@@ -210,14 +260,27 @@ function playFrame(ctx,map){
 		collision(player,map);
 		player.move();
 		showPlayer(ctx);
+		if(playerOnFinish(player))
+			return true;
 	}
+	else
+		player.moveTowardsStart();
+	
+	return false;
 }
 
 function actions(interval,ctx,mapNumber,map,map_code){
 	if(retryGame){
 		retryGame=false;
 		clearInterval(interval);
+		endGame=false;
 		play(mapNumber,map_code);
+		return;
+	}
+	if(nextLevel){
+		clearInterval(interval);
+		play(mapNumber+1);
+		return;
 	}
 	if(exitGame){
 		clearInterval(interval);
@@ -237,7 +300,20 @@ function actions(interval,ctx,mapNumber,map,map_code){
 		$("#go_back").show();
 	}
 	else
-		playFrame(ctx,map);
+		if(!endGame)
+			if(playFrame(ctx,map)){
+				endGame=true;
+				if(mapNumber>=cleared){
+					cleared=mapNumber+1;
+					document.cookie="cleared="+cleared+"; expires=19 Jan 2038 03:14:07 UTC; max-age="+60*60*24*365*60+";";
+					setClearedLevels();
+				}
+				if(mapNumber>=0 && mapNumber<levels-1)
+					$("#next_level").show();
+				else
+					$("#next_level").hide();
+				$("#win_div").show();
+			}
 }
 
 function disableZeroes(){
@@ -320,12 +396,6 @@ function sendStickman(num){
 	player.setInPlay(true);
 }
 
-function getTile(x,y){
-	if(x>=0 && x<map_width && y>=0 && y<map_height)
-		return map[x][y];
-	return null;
-}
-
 function handleSwitchPress(x,y){
 	for(var i=0;i<switches.length;i++){
 		if(switches[i][0][0]==x && switches[i][0][1]==y){
@@ -363,8 +433,15 @@ function gameClickListener(){
 	}
 }
 
+function moveToNextLevel(){
+	$("#win_div").hide();
+	nextLevel=true;
+}
+
 function play(mapNumber,map_code){
 	exitGame=false;
+	endGame=false;
+	nextLevel=false;
 	var interval;
 	if(map_code==undefined){
 		if(mapNumber==-1)
@@ -374,6 +451,10 @@ function play(mapNumber,map_code){
 		if(mapNumber>=0)
 			map_code=readMap(mapNumber);
 	}
+	if(mapNumber>=0)
+		$("#level_text").html("Level: "+(mapNumber+1));
+	else
+		$("#level_text").html("");
 	player.init();
 	stickNumber=[];
 	disableAll(false);

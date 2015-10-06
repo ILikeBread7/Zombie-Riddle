@@ -12,135 +12,145 @@
 	</head>
 	<body onload="init();">
 		<canvas id="canv" width="800" height="600"></canvas>
-	</body>
-	<button class="main_menu" id="start" onclick="this.blur(); startAction();">START</button>
-	<button class="main_menu" id="instructions" onclick="this.blur(); instrAction();">INSTRUCTIONS</button>
-	<button class="main_menu" id="level_editor" onclick="this.blur(); levelEditAction();">LEVEL EDITOR</button>
-	<button class="instr" id="go_back" onclick="this.blur(); goBackInstr();">BACK</button>
-	<div class="instr" id="instr_div">
-		Your goal is to get to the end of each level.
-		In order to do this you have to build bridges, use switches and destroy walls.
-		You can use stickmen to do these tasks. Every type of stickman is good for only one task, however when the task is done or the time runs out your friend will turn into a zombie and is going to assault everyone you send in next.
-		Unfortunately only one type of stickman is capable of fighting (that is before becoming a zombie).
-	</div>
-	<div class="start" id="levels"></div>
-	<div class="start" id="custom_levels">
-		Paste a level code here to play a custom level.
-		<input type="text" id="level_code"></input>
-		<button id="custom_play" onclick="this.blur(); play(-2);">PLAY</button>
-	</div>
-	<div class="level_editor" id="tile_select">
-		<button id="floor" class="editor_tile" onclick="this.blur(); tileSelected('floor');"></button>
-		<button id="start_point" class="editor_tile" onclick="this.blur(); tileSelected('start_point');"></button>
-		<button id="finish_point" class="editor_tile" onclick="this.blur(); tileSelected('finish_point');"></button>
-		<button id="hole" class="editor_tile" onclick="this.blur(); tileSelected('hole');"></button>
-		<button id="wall" class="editor_tile" onclick="this.blur(); tileSelected('wall');"></button>
-		<button id="steel_wall" class="editor_tile" onclick="this.blur(); tileSelected('steel_wall');"></button>
-		<button id="switch" class="editor_tile" onclick="this.blur(); tileSelected('switch');"></button>
-		<button id="door" class="editor_tile" onclick="this.blur(); tileSelected('door');"></button>
-		<button id="open_door" class="editor_tile" onclick="this.blur(); tileSelected('open_door');"></button>
-	</div>
-	<div id="import_export" class="level_editor">
-		<button id="export" onclick="exportMap();">Export map</button>
-		<input type="text" id="map_code"></input>
-		<button id="import" onclick="importMap();">Import map</button>
-	</div>
-	<div id="scroll" class="level_editor">
-		<canvas id="editor_canv" width="0" height="0"></canvas>
-	</div>
-	<div id="width_height" class="level_editor">
-		Width: <input type="number" min="1" value="1" class="width_height" id="width" onkeydown="if(event.keyCode==13) $('#apply_wh').click();"></input>
-		Height: <input type="number" min="1" value="1" class="width_height" id="height" onkeydown="if(event.keyCode==13) $('#apply_wh').click();"></input>
-		<button id="apply_wh" onclick="editorMapSize();">Change map size</button>
-	</div>
-	<button id="test_play" class="level_editor" onclick="stopChoosingDoors(false); play(-1);">Test play</button>
-	<div id="editor_chars" class="level_editor">
-		<div class="editor_char" id="bridges">
-			<input class="char_number" id="bridges_input" type="number" value ="0" min="0" max="99"></input>
-		</div>
-		<div class="editor_char" id="switches">
-			<input class="char_number" id="switches_input" type="number" value ="0" min="0" max="99"></input>
-		</div>
-		<div class="editor_char" id="walls">
-			<input class="char_number" id="walls_input" type="number" value ="0" min="0" max="99"></input>
-		</div>
 		
-		<!--
-		<div class="editor_char" id="thrower">
-			<input class="char_number" id="thrower_input" type="number" value ="0" min="0" max="99"></input>
+		<div id="win_div">
+			Stage cleared!<br/>
+			<button class="win_button" onclick="retry();">Retry</button>
+			<button class="win_button" id="next_level" onclick="moveToNextLevel();">Next Level</button>
+			<button class="win_button" onclick="exit();">Exit</button>
 		</div>
-		-->
-		
-		<div class="editor_char" id="fighter">
-			<input class="char_number" id="fighter_input" type="number" value ="0" min="0" max="99"></input>
+	
+		<button class="main_menu" id="start" onclick="this.blur(); startAction();">START</button>
+		<button class="main_menu" id="instructions" onclick="this.blur(); instrAction();">INSTRUCTIONS</button>
+		<button class="main_menu" id="level_editor" onclick="this.blur(); levelEditAction();">LEVEL EDITOR</button>
+		<button class="instr" id="go_back" onclick="this.blur(); goBackInstr();">BACK</button>
+		<div class="instr" id="instr_div">
+			Your goal is to get to the end of each level.
+			In order to do this you have to build bridges, use switches and destroy walls.
+			You can use stickmen to do these tasks. Every type of stickman is good for only one task, however when the task is done or the time runs out your friend will turn into a zombie and is going to assault everyone you send in next.
+			Unfortunately only one type of stickman is capable of fighting (that is before becoming a zombie).
 		</div>
-		<div class="editor_char" id="nothing">
-			<input class="char_number" id="nothing_input" type="number" value ="0" min="0" max="99"></input>
+		<div class="start" id="levels"></div>
+		<div class="start" id="custom_levels">
+			Paste a level code here to play a custom level.
+			<input type="text" id="level_code"></input>
+			<button id="custom_play" onclick="this.blur(); play(-2);">PLAY</button>
 		</div>
-	</div>
-	<div id="selected_tile" class="level_editor"></div>
-	<div id="chosen_doors"class="level_editor">
-		<button class="stop_doors" id="stop_doors" onclick="stopChoosingDoors(true);">CONFIRM</button><br>
-		Chosen spikes:
-		<div id="doors_list"></div>
-		<button class="stop_doors" id="stop_doors_cancel" onclick="stopChoosingDoors(false);">CANCEL</button>
-	</div>
-	<p id="signature">2015, Created by: I_LIKE_BREAD7</p>
-	<audio autoplay loop id="bgMusic">
-		<!-- <source src="main_bg.mp3" type="audio/mpeg"> -->
-	</audio>
-	<div id="lower_panel" class="in_game">
-		<button class="game_button" id="exit" onclick="this.blur(); exit();">EXIT</button>
-		<button class="game_button" id="retry" onclick="this.blur(); retry();">RETRY</button>
-		<div id="chars">
-			<button class="char" id="bridges_game" onclick="this.blur(); sendStickman(0);">
-				<div class="button_div" id="bridges_div">0</div>
-			</button>
-			<button class="char" id="switches_game" onclick="this.blur(); sendStickman(1);">
-				<div class="button_div" id="switches_div">0</div>
-			</button>
-			<button class="char" id="walls_game" onclick="this.blur(); sendStickman(2);">
-				<div class="button_div" id="walls_div">0</div>
-			</button>
+		<div class="level_editor" id="tile_select">
+			<button id="floor" class="editor_tile" onclick="this.blur(); tileSelected('floor');"></button>
+			<button id="start_point" class="editor_tile" onclick="this.blur(); tileSelected('start_point');"></button>
+			<button id="finish_point" class="editor_tile" onclick="this.blur(); tileSelected('finish_point');"></button>
+			<button id="hole" class="editor_tile" onclick="this.blur(); tileSelected('hole');"></button>
+			<button id="wall" class="editor_tile" onclick="this.blur(); tileSelected('wall');"></button>
+			<button id="steel_wall" class="editor_tile" onclick="this.blur(); tileSelected('steel_wall');"></button>
+			<button id="switch" class="editor_tile" onclick="this.blur(); tileSelected('switch');"></button>
+			<button id="door" class="editor_tile" onclick="this.blur(); tileSelected('door');"></button>
+			<button id="open_door" class="editor_tile" onclick="this.blur(); tileSelected('open_door');"></button>
+		</div>
+		<div id="import_export" class="level_editor">
+			<button id="export" onclick="exportMap();">Export map</button>
+			<input type="text" id="map_code"></input>
+			<button id="import" onclick="importMap();">Import map</button>
+		</div>
+		<div id="scroll" class="level_editor">
+			<canvas id="editor_canv" width="0" height="0"></canvas>
+		</div>
+		<div id="width_height" class="level_editor">
+			Width: <input type="number" min="1" value="1" class="width_height" id="width" onkeydown="if(event.keyCode==13) $('#apply_wh').click();"></input>
+			Height: <input type="number" min="1" value="1" class="width_height" id="height" onkeydown="if(event.keyCode==13) $('#apply_wh').click();"></input>
+			<button id="apply_wh" onclick="editorMapSize();">Change map size</button>
+		</div>
+		<button id="test_play" class="level_editor" onclick="stopChoosingDoors(false); play(-1);">Test play</button>
+		<div id="editor_chars" class="level_editor">
+			<div class="editor_char" id="bridges">
+				<input class="char_number" id="bridges_input" type="number" value ="0" min="0" max="99"></input>
+			</div>
+			<div class="editor_char" id="switches">
+				<input class="char_number" id="switches_input" type="number" value ="0" min="0" max="99"></input>
+			</div>
+			<div class="editor_char" id="walls">
+				<input class="char_number" id="walls_input" type="number" value ="0" min="0" max="99"></input>
+			</div>
 			
 			<!--
-			<button class="char" id="thrower_game" onclick="this.blur(); sendStickman(3);">
-				<div class="button_div" id="thrower_div">0</div>
-			</button>
+			<div class="editor_char" id="thrower">
+				<input class="char_number" id="thrower_input" type="number" value ="0" min="0" max="99"></input>
+			</div>
 			-->
 			
-			<button class="char" id="fighter_game" onclick="this.blur(); sendStickman(4);">
-				<div class="button_div" id="fighter_div">0</div>
-			</button>
-			<button class="char" id="nothing_game" onclick="this.blur(); sendStickman(5);">
-				<div class="button_div" id="nothing_div">0</div>
-			</button>
+			<div class="editor_char" id="fighter">
+				<input class="char_number" id="fighter_input" type="number" value ="0" min="0" max="99"></input>
+			</div>
+			<div class="editor_char" id="nothing">
+				<input class="char_number" id="nothing_input" type="number" value ="0" min="0" max="99"></input>
+			</div>
 		</div>
-	</div>
-	<div class="controls" id="volume_control">
-		Volume:<br>
-		<input id="volume" type="range" min="0" max="1" step="0.01" value="1" onmouseup="changeVol();"></input>
-	</div>
-	<img id="tytuu" src="tytuu.png"></img>
-	<img id="floor_img" src="floor.png"></img>
-	<img id="start_point_img" src="start_point.png"></img>
-	<img id="finish_point_img" src="finish_point.png"></img>
-	<img id="open_door_img" src="open_door.png"></img>
-	<img id="wall_img" src="wall.png"></img>
-	<img id="steel_wall_img" src="steel_wall.png"></img>
-	<img id="switch_img" src="switch.png"></img>
-	<img id="door_img" src="door.png"></img>
-	<img id="hole_img" src="hole.png"></img>
-	<img id="bridge_img" src="bridge.png"></img>
+		<div id="selected_tile" class="level_editor"></div>
+		<div id="chosen_doors"class="level_editor">
+			<button class="stop_doors" id="stop_doors" onclick="stopChoosingDoors(true);">CONFIRM</button><br>
+			Chosen spikes:
+			<div id="doors_list"></div>
+			<button class="stop_doors" id="stop_doors_cancel" onclick="stopChoosingDoors(false);">CANCEL</button>
+		</div>
+		<p id="signature">2015, Created by: I_LIKE_BREAD7</p>
+		<audio autoplay loop id="bgMusic">
+			<!-- <source src="main_bg.mp3" type="audio/mpeg"> -->
+		</audio>
+		<div id="lower_panel" class="in_game">
+			<button class="game_button" id="exit" onclick="this.blur(); exit();">EXIT</button>
+			<button class="game_button" id="retry" onclick="this.blur(); retry();">RETRY</button>
+			<div id="chars">
+				<button class="char" id="bridges_game" onclick="this.blur(); sendStickman(0);">
+					<div class="button_div" id="bridges_div">0</div>
+				</button>
+				<button class="char" id="switches_game" onclick="this.blur(); sendStickman(1);">
+					<div class="button_div" id="switches_div">0</div>
+				</button>
+				<button class="char" id="walls_game" onclick="this.blur(); sendStickman(2);">
+					<div class="button_div" id="walls_div">0</div>
+				</button>
+				
+				<!--
+				<button class="char" id="thrower_game" onclick="this.blur(); sendStickman(3);">
+					<div class="button_div" id="thrower_div">0</div>
+				</button>
+				-->
+				
+				<button class="char" id="fighter_game" onclick="this.blur(); sendStickman(4);">
+					<div class="button_div" id="fighter_div">0</div>
+				</button>
+				<button class="char" id="nothing_game" onclick="this.blur(); sendStickman(5);">
+					<div class="button_div" id="nothing_div">0</div>
+				</button>
+			</div>
+			<div id="level_text"></div>
+		</div>
+		<div class="controls" id="volume_control">
+			Volume:<br>
+			<input id="volume" type="range" min="0" max="1" step="0.01" value="1" onmouseup="changeVol();"></input>
+		</div>
+		<img id="tytuu" src="tytuu.png"></img>
+		<img id="floor_img" src="floor.png"></img>
+		<img id="start_point_img" src="start_point.png"></img>
+		<img id="finish_point_img" src="finish_point.png"></img>
+		<img id="open_door_img" src="open_door.png"></img>
+		<img id="wall_img" src="wall.png"></img>
+		<img id="steel_wall_img" src="steel_wall.png"></img>
+		<img id="switch_img" src="switch.png"></img>
+		<img id="door_img" src="door.png"></img>
+		<img id="hole_img" src="hole.png"></img>
+		<img id="bridge_img" src="bridge.png"></img>
+		
+		<img id="player_0_img" src="player_0.png"></img>
+		<img id="player_1_img" src="player_1.png"></img>
+		<img id="player_2_img" src="player_2.png"></img>
+		
+		<!--
+		<img id="player_3_img" src="player_3.png"></img>
+		-->
+		
+		<img id="player_4_img" src="player_4.png"></img>
+		<img id="player_5_img" src="player_5.png"></img>
 	
-	<img id="player_0_img" src="player_0.png"></img>
-	<img id="player_1_img" src="player_1.png"></img>
-	<img id="player_2_img" src="player_2.png"></img>
-	
-	<!--
-	<img id="player_3_img" src="player_3.png"></img>
-	-->
-	
-	<img id="player_4_img" src="player_4.png"></img>
-	<img id="player_5_img" src="player_5.png"></img>
+	</body>
 </html>

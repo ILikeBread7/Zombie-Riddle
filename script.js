@@ -1,4 +1,3 @@
-var cleared;
 var editor_tile;
 var editor_map;
 var editor_switches;
@@ -182,7 +181,7 @@ function importMap(){
 	$("#bridges_input").val(s[3]);
 	$("#switches_input").val(s[4]);
 	$("#walls_input").val(s[5]);
-	$("#thrower_input").val(s[6]);
+	//$("#thrower_input").val(s[6]);
 	$("#fighter_input").val(s[7]);
 	$("#nothing_input").val(s[8]);
 	putStart(s[2]);
@@ -286,11 +285,14 @@ function editorUnclick(event){
 			}
 	}
 }
+function setClearedLevels(){
+	for(var i=0;$("#level"+i).length>0;i++)
+		setCleared(i,cleared);
+}
 function startAction(){
 	$(".main_menu").hide();
 	$("#go_back").show();
-	for(var i=0;$("#level"+i).length>0;i++)
-		setCleared(i,cleared);
+	setClearedLevels();
 	$(".start").show();
 }
 function instrAction(){
@@ -335,10 +337,9 @@ function init(){
 	document.addEventListener("keyup",keyListener);
 	canv.addEventListener("click",gameClickListener);
 	var ctx=canv.getContext("2d");
-	//document.cookie="cleared=3; expires=19 Jan 2038 03:14:07 UTC";
 	var cookies=document.cookie;
 	cleared=readCookie("cleared",cookies);
-	var levels=countLevels();
+	levels=countLevels();
 	editor_tile="floor";
 	addLevels(levels);
 	var editor_canv=document.getElementById("editor_canv");
