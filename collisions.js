@@ -63,3 +63,35 @@ function squareCollisions(squares,x,y,r){
 	
 	return movable;
 }
+
+function circlesCollide(x1,y1,r1,x2,y2,r2){
+	var xDist=x1-x2;
+	var yDist=y1-y2;
+	return (Math.sqrt(xDist*xDist+yDist*yDist)<r1+r2);
+}
+
+function playerZombieCollision(ch,zombieArr){
+	for(var i=0;i<zombieArr.length;i++){
+		var zombieCh=zombieArr[i].getMovingChar();
+		if(circlesCollide(ch.getCenterX(),ch.getCenterY(),ch.getRadius(),zombieCh.getCenterX(),zombieCh.getCenterY(),zombieCh.getRadius()))
+			return true;
+	}
+	return false;
+}
+
+function zombieCollision(ch1,ch2){
+	var x1=ch1.getTmpCenterX();
+	var y1=ch1.getTmpCenterY();
+	var x2=ch2.getCenterX();
+	var y2=ch2.getCenterY();
+	if(circlesCollide(x1,y1,ch1.getRadius(),x2,y2,ch2.getRadius())){
+		if(y1<y2)
+			ch1.disableMovable(2); //DOWN
+		else
+			ch1.disableMovable(0); //UP
+		if(x1<x2)
+			ch1.disableMovable(1);	//RIGHT
+		else
+			ch1.disableMovable(3);	//LEFT
+	}
+}
