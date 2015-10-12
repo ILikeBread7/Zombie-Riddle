@@ -34,7 +34,11 @@ function readCookie(name,cookies){
 }
 function changeVol(){
 	var volume=document.getElementById("volume");
-	var audio=document.getElementById("bgMusic");
+	var audio=document.getElementById("bgMusicTitle");
+	audio.volume=volume.value;
+	audio=document.getElementById("bgMusicGame");
+	audio.volume=volume.value;
+	audio=document.getElementById("bgMusicEditor");
 	audio.volume=volume.value;
 }
 function mainMenu(ctx){
@@ -45,6 +49,9 @@ function mainMenu(ctx){
 	$("#volume_control").removeClass("volume_control_in_level_editor");
 	$(".controls").show();
 	$("#signature").show();
+	document.getElementById("bgMusicEditor").pause();
+	document.getElementById("bgMusicGame").pause();
+	playMusic(document.getElementById("bgMusicTitle"));
 }
 
 function clearLevel(s){
@@ -314,6 +321,8 @@ function levelEditAction(){
 	$("#go_back").show();
 	$(".level_editor").show();
 	$("#chosen_doors").hide();
+	document.getElementById("bgMusicTitle").pause();
+	playMusic(document.getElementById("bgMusicEditor"));
 }
 function goBackInstr(){
 	$(".instr").hide();

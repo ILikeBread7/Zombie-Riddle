@@ -339,10 +339,12 @@ function actions(interval,ctx,mapNumber,map,map_code){
 	}
 	if(exitGame){
 		clearInterval(interval);
+		document.getElementById("bgMusicGame").pause();
 		if(mapNumber==-1){
 			fill(ctx,"#eeeeee");
 			$(".level_editor").show();
 			$("#chosen_doors").hide();
+			playMusic(document.getElementById("bgMusicEditor"));
 		}
 		else{
 			ctx.clearRect(0,0,800,600);
@@ -351,9 +353,11 @@ function actions(interval,ctx,mapNumber,map,map_code){
 			$("#volume_control").removeClass("volume_control_in_level_editor");
 			$("#signature").show();
 			$(".start").show();
+			playMusic(document.getElementById("bgMusicTitle"));
 		}
 		$("#pause").hide();
 		$("#go_back").show();
+		
 	}
 	else
 		if(!endGame)
@@ -523,6 +527,8 @@ function play(mapNumber,map_code){
 	nextLevel=false;
 	pause=false;
 	zombies.reset();
+	document.getElementById("bgMusicTitle").pause();
+	playMusic(document.getElementById("bgMusicGame"));
 	var interval;
 	if(map_code==undefined){
 		if(mapNumber==-1)

@@ -79,3 +79,9 @@ function segmentCircleIntersect(ax,ay,bx,by,cx,cy,r){
 
 	return false;
 }
+function playMusic(music){
+	if(music.paused){
+		music.currentTime=0;
+		music.play();
+	}
+}
