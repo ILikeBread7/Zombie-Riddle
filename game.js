@@ -528,6 +528,7 @@ function play(mapNumber,map_code){
 	pause=false;
 	zombies.reset();
 	document.getElementById("bgMusicTitle").pause();
+	document.getElementById("bgMusicEditor").pause();
 	playMusic(document.getElementById("bgMusicGame"));
 	var interval;
 	if(map_code==undefined){
