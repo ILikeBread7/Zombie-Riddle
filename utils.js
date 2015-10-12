@@ -58,3 +58,24 @@ function getTileName(tile){
 	if(tile==14)
 		return "hole";
 }
+function dist(x1,y1,x2,y2){
+	var dx=x1-x2;
+	var dy=y1-y2;
+	return Math.sqrt(dx*dx+dy*dy);
+}
+function segmentCircleIntersect(ax,ay,bx,by,cx,cy,r){
+	if(dist(ax,ay,cx,cy)<=r || dist(bx,by,cx,cy)<=r)
+		return true;
+	
+	var d=dist(ax,ay,bx,by);
+	var alpha=((bx-ax)*(cx-ax)+(by-ay)*(cy-ay))/(d*d);
+	var mx=ax+(bx-ax)*alpha;
+	var my=ay+(by-ay)*alpha;
+	
+	if(dist(mx,my,cx,cy)>r)
+		return false;
+	if(dist(mx,my,ax,ay)<=d && dist(mx,my,bx,by)<=d)
+		return true;
+
+	return false;
+}

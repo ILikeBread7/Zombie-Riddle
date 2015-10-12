@@ -103,6 +103,32 @@ function movingChar(){
 				player_y-=scroll_speed;
 			if(Math.abs(player_y-y*40)<=scroll_speed)
 				player_y=y*40;
+		},
+		getDistance:function(ch){
+			var xDist=this.getCenterX()-ch.getCenterX();
+			var yDist=this.getCenterY()-ch.getCenterY();
+			return Math.sqrt(xDist*xDist+yDist*yDist);
+		},
+		getAngleToDist:function(x,y){
+			var c=(Math.sqrt(x*x+y*y));
+			if(c==0)
+				return 0;
+			var sinAlpha=x/c;
+			if(y<=0)
+				return Math.asin(sinAlpha);
+			else
+				return Math.PI-Math.asin(sinAlpha);
+		},
+		getAngleTo:function(ch){
+			var x=ch.getCenterX()-this.getCenterX();
+			var y=ch.getCenterY()-this.getCenterY();
+			return this.getAngleToDist(x,y);
+		},
+		setAngleTo:function(x,y){
+			this.setAngle(this.getAngleTo(x,y));
+		},
+		setAngleToDist:function(x,y){
+			this.setAngle(this.getAngleToDist(x,y));
 		}
 	}
 }

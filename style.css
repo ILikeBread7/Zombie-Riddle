@@ -54,6 +54,18 @@ div#win_div{
 	font-size:32px;
 	text-align:center;
 }
+div#pause{
+	display:none;
+	position:absolute;
+	padding:8px;
+	background: rgba(0, 0, 0, 0.8);
+	top:400px;
+	left:192px;
+	color:#ffffff;
+	width:400px;
+	font-size:32px;
+	text-align:center;
+}
 div#level_text{
 	color:#ffffff;
 	position:relative;

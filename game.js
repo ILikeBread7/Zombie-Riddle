@@ -15,6 +15,8 @@ var map;
 var mouse_x;
 var mouse_y;
 
+var pause=false;
+
 var PLAYER_ABSOLUTE_X=400;
 var PLAYER_ABSOLUTE_Y=260;
 
@@ -30,12 +32,16 @@ var zombies=function(){
 					var character=movingChar();
 					character.putAtXY(x,y);
 					character.setAngle(angle);
-					character.setSpeed(2);
+					character.setSpeed(1);
 					
 					var timer=0;
+					var change_time=1;
 					var new_angle=angle;
-					var angle_speed=Math.PI/16;
+					var angle_speed=Math.PI/64;
 					var angle_dir=true;	//true=clockwise, false=counter clockwise;
+					var dead=false;
+					
+					var lock_on_player=false;
 					
 					var adjustAngle=function(){
 						var angle_tmp=(character.getAngle()+2*Math.PI)%(2*Math.PI);
@@ -48,6 +54,12 @@ var zombies=function(){
 						character.setAngle(angle_tmp);
 					};
 					
+					var setAngleDir=function(){
+						var angle_tmp=(character.getAngle()+4*Math.PI)%(2*Math.PI);
+						var angleDiff=Math.abs(angle_tmp-new_angle);
+						angle_dir=((angleDiff<Math.PI && new_angle>angle_tmp) || (angleDiff>Math.PI && angle_tmp>new_angle));
+					};
+					
 					return{
 						getMovingChar:function(){
 							return character;
@@ -56,16 +68,33 @@ var zombies=function(){
 							character.move();
 						},
 						decideMovement:function(){
-							if(timer%100==0){
+							if(!lock_on_player && timer%change_time==0){
+								timer=1;
 								new_angle=2*Math.random()*Math.PI;
-								var angle_tmp=(character.getAngle()+2*Math.PI)%(2*Math.PI);
-								var angleDiff=(angle-new_angle+4*Math.PI)%(2*Math.PI);
-								
-								angle_dir=(angleDiff>Math.PI);
+								change_time=Math.floor(Math.random()*51)+100;
+								setAngleDir();
 							}
 							adjustAngle();
 							character.decideMovement(0);
 							timer++;
+						},
+						searchPlayer:function(ch){
+							if(character.getDistance(ch)<4*40){
+								lock_on_player=true;
+								new_angle=(character.getAngleTo(ch)+4*Math.PI)%(2*Math.PI);
+								setAngleDir();
+							}
+							else
+								lock_on_player=false;
+						},
+						stopSearchPlayer:function(){
+							lock_on_player=false;
+						},
+						kill:function(){
+							dead=true;
+						},
+						isDead:function(){
+							return dead;
 						}
 					}
 				}();
@@ -88,6 +117,7 @@ var player=function(){
 	var start_y;
 	var in_play=false;
 	var stickman_type=0;
+	var sword_range=40;
 	
 	var putAtStart=function(){
 		character.putAtXY(start_x*40,start_y*40);
@@ -124,6 +154,9 @@ var player=function(){
 		},
 		moveTowardsStart:function(){
 			character.moveTowards(start_x,start_y,scroll_speed);
+		},
+		getSwordRange:function(){
+			return sword_range;
 		}
 	}
 }();
@@ -140,8 +173,11 @@ function mouseMoveListener(event){
 	mouse_y=event.pageY-rect.top;
 }
 function keyListener(event){
-	if(event.type=='keydown')
+	if(event.type=='keydown'){
+		if(event.keyCode==27)
+			pause=!pause;
 		controls.setPressed(event.keyCode);
+	}
 	else if(event.type=='keyup')
 		controls.setReleased(event.keyCode);
 }
@@ -191,11 +227,7 @@ function showPlayer(ctx){
 function decidePlayerAngle(){
 	var x=mouse_x-PLAYER_ABSOLUTE_X-20;
 	var y=mouse_y-PLAYER_ABSOLUTE_Y-20;
-	var sinAlpha=x/(Math.sqrt(x*x+y*y));
-	if(y<=0)
-		player.getMovingChar().setAngle(Math.asin(sinAlpha));
-	else
-		player.getMovingChar().setAngle(Math.PI-Math.asin(sinAlpha));
+	player.getMovingChar().setAngleToDist(x,y);
 }
 
 function getCollidingSquare(x,y){	
@@ -242,6 +274,12 @@ function playerOnFinish(player){
 }
 
 function playFrame(ctx,map){
+	if(pause){
+		$("#pause").show();
+		return false;
+	}
+	else
+		$("#pause").hide();
 	var ch=player.getMovingChar();
 	fill(ctx,"#ffffff");
 	for(var x=ch.getX()-10;x<ch.getX()+11;x++)
@@ -249,6 +287,14 @@ function playFrame(ctx,map){
 			showTile(ctx,map,x,y);
 	var zombieArr=zombies.getZombies();
 	for(var i=0;i<zombieArr.length;i++){
+		if(zombieArr[i].isDead()){
+			zombies.removeZombie(i);
+			continue;
+		}
+		if(player.isInPlay())
+			zombieArr[i].searchPlayer(ch);
+		else
+			zombieArr[i].stopSearchPlayer();
 		zombieArr[i].decideMovement();
 		collision(zombieArr[i].getMovingChar(),map);
 		for(var j=0;j<zombieArr.length;j++){
@@ -306,6 +352,7 @@ function actions(interval,ctx,mapNumber,map,map_code){
 			$("#signature").show();
 			$(".start").show();
 		}
+		$("#pause").hide();
 		$("#go_back").show();
 	}
 	else
@@ -399,14 +446,16 @@ function readData(map_code){
 }
 
 function sendStickman(num){
-	stickNumber[num]--;
-	setButtonNumbers();
-	player.setType(num);
-	if(player.isInPlay()){
-		var ch=player.getMovingChar();
-		zombies.addZombie(ch.getAbsoluteX(),ch.getAbsoluteY(),ch.getAngle());
+	if(!pause){
+		stickNumber[num]--;
+		setButtonNumbers();
+		player.setType(num);
+		if(player.isInPlay()){
+			var ch=player.getMovingChar();
+			zombies.addZombie(ch.getAbsoluteX(),ch.getAbsoluteY(),ch.getAngle());
+		}
+		player.setInPlay(true);
 	}
-	player.setInPlay(true);
 }
 
 function handleSwitchPress(x,y){
@@ -444,6 +493,22 @@ function gameClickListener(){
 				player.setInPlay(false);
 			}
 		}
+		if(player.getType()==4){
+			var ch=player.getMovingChar();
+			var x=ch.getCenterX();
+			var y=ch.getCenterY();
+			var sword_range=player.getSwordRange();
+			var angle=ch.getAngle();
+			var sword_y=y-sword_range*Math.cos(angle);
+			var sword_x=x+sword_range*Math.sin(angle);
+			
+			var zombieArr=zombies.getZombies();
+			for(var i=0;i<zombieArr.length;i++){
+				var ch=zombieArr[i].getMovingChar();
+				if(segmentCircleIntersect(x,y,sword_x,sword_y,ch.getCenterX(),ch.getCenterY(),ch.getRadius()))
+					zombieArr[i].kill();
+			}
+		}
 	}
 }
 
@@ -456,6 +521,7 @@ function play(mapNumber,map_code){
 	exitGame=false;
 	endGame=false;
 	nextLevel=false;
+	pause=false;
 	zombies.reset();
 	var interval;
 	if(map_code==undefined){

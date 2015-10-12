@@ -1,4 +1,4 @@
-function dist(point,x,y){
+function distToVertex(point,x,y){
 	var x_dist=point[0]-x;
 	var y_dist=point[1]-y;
 	return Math.sqrt(x_dist*x_dist+y_dist*y_dist);
@@ -8,19 +8,19 @@ function createSquare(x,y){
 	var pUL=[x*40,y*40],pUR=[x*40+40,y*40],pBL=[x*40,y*40+40],pBR=[x*40+40,y*40+40];
 	
 	function checkVertices(movable,x,y,r){
-		if(dist(pUL,x,y)<r){
+		if(distToVertex(pUL,x,y)<r){
 			movable[1]=false;	//RIGHT
 			movable[2]=false;	//DOWN
 		}
-		if(dist(pUR,x,y)<r){
+		if(distToVertex(pUR,x,y)<r){
 			movable[3]=false;	//LEFT
 			movable[2]=false;	//DOWN
 		}
-		if(dist(pBL,x,y)<r){
+		if(distToVertex(pBL,x,y)<r){
 			movable[0]=false;	//UP
 			movable[1]=false;	//RIGHT
 		}
-		if(dist(pBR,x,y)<r){
+		if(distToVertex(pBR,x,y)<r){
 			movable[3]=false;	//LEFT
 			movable[0]=false;	//UP
 		}
@@ -46,8 +46,17 @@ function createSquare(x,y){
 		}
 	}
 	
+	function centerCollision(x,y){
+		return (pUL[0]<x && x<pUR[0] && pUL[1]<y && y<pBL[1]);
+	}
+	
 	return{
 		setColliding:function(movable,x,y,r,squaresQuantity){
+			if(centerCollision(x,y)){
+				for(var i=0;i<movable.length;i++)
+					movable[i]=false;
+				return;
+			}
 			if(squaresQuantity==1)
 				checkVertices(movable,x,y,r);
 			checkSides(movable,x,y,r);
