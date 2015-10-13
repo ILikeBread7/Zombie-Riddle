@@ -1,5 +1,6 @@
 var controls=function(){
 	var keys=[false,false,false,false,false];
+	
 	return{
 		setPressed:function(code){
 			switch(code){

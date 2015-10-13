@@ -116,8 +116,11 @@ var player=function(){
 	var start_x;
 	var start_y;
 	var in_play=false;
+	var scrolling=false;
 	var stickman_type=0;
 	var sword_range=40;
+	var timer_limit=20;
+	var timer=timer_limit;
 	
 	var putAtStart=function(){
 		character.putAtXY(start_x*40,start_y*40);
@@ -143,8 +146,10 @@ var player=function(){
 			in_play=val;
 			if(val==true)
 				putAtStart();
-			else
+			else{
+				timer=0;
 				zombies.addZombie(character.getAbsoluteX(),character.getAbsoluteY(),character.getAngle());
+			}
 		},
 		setType:function(num){
 			stickman_type=num;
@@ -157,6 +162,21 @@ var player=function(){
 		},
 		getSwordRange:function(){
 			return sword_range;
+		},
+		getScrollSpeed:function(){
+			return scroll_speed;
+		},
+		setScrolling:function(val){
+			scrolling=val;
+		},
+		isScrolling:function(){
+			return scrolling;
+		},
+		incTimer:function(){
+			timer++;
+		},
+		checkTimer:function(){
+			return timer>timer_limit;
 		}
 	}
 }();
@@ -306,6 +326,7 @@ function playFrame(ctx,map){
 	}
 	showZombies(ctx);
 	if(player.isInPlay()){
+		player.setScrolling(false);
 		decidePlayerAngle();
 		ch.decideMovement(controls.direction());
 		collision(ch,map);
@@ -318,8 +339,31 @@ function playFrame(ctx,map){
 				return true;
 		}
 	}
-	else
-		player.moveTowardsStart();
+	else{
+		if(player.checkTimer()){
+			if(controls.keyPressed(3)){	//LEFT
+				ch.moveHorizontallyTo(0,player.getScrollSpeed());
+				player.setScrolling(true);
+			}
+			else if(controls.keyPressed(1)){	//RIGHT
+				ch.moveHorizontallyTo(map_width,player.getScrollSpeed());
+				player.setScrolling(true);
+			}
+			
+			if(controls.keyPressed(0)){	//UP
+				ch.moveVerticallyTo(0,player.getScrollSpeed());
+				player.setScrolling(true);
+			}
+			else if(controls.keyPressed(2)){	//DOWN
+				ch.moveVerticallyTo(map_height,player.getScrollSpeed());
+				player.setScrolling(true);
+			}
+		}
+		
+		if(!player.isScrolling())
+			player.moveTowardsStart();
+		player.incTimer();
+	}
 	
 	return false;
 }

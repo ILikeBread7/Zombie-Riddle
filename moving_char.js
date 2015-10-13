@@ -104,6 +104,22 @@ function movingChar(){
 			if(Math.abs(player_y-y*40)<=scroll_speed)
 				player_y=y*40;
 		},
+		moveHorizontallyTo:function(x,scroll_speed){
+			if(player_x/40<x)
+				player_x+=scroll_speed;
+			else
+				player_x-=scroll_speed;
+			if(Math.abs(player_x-x*40)<=scroll_speed)
+				player_x=x*40;
+		},
+		moveVerticallyTo:function(y,scroll_speed){
+			if(player_y/40<y)
+				player_y+=scroll_speed;
+			else
+				player_y-=scroll_speed;
+			if(Math.abs(player_y-y*40)<=scroll_speed)
+				player_y=y*40;
+		},
 		getDistance:function(ch){
 			var xDist=this.getCenterX()-ch.getCenterX();
 			var yDist=this.getCenterY()-ch.getCenterY();
