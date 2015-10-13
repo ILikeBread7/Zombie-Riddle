@@ -74,7 +74,7 @@ div#level_text{
 	color:#ffffff;
 	position:relative;
 	top:10px;
-	left:540px;
+	left:550px;
 	width:100px;
 }
 div#tile_select{
@@ -350,6 +350,20 @@ button.game_button:hover{
 	width:80px;
 	height:26px;
 	font-size:13px;
+}
+button#undo_button{
+	background:linear-gradient(#32f532, #eaeaea);
+	border:3px solid #32b232;
+	border-radius:3px;
+	font-size:12px;
+	font-weight:bold;
+}
+button#undo_button:hover{
+	background:linear-gradient(#32f532, #eaeaea);
+	border:3px solid #32b232;
+	border-radius:3px;
+	font-size:13px;
+	font-weight:bold;
 }
 button.win_button{
 	width:90px;

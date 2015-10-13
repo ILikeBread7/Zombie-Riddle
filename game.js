@@ -5,12 +5,17 @@ var exitGame;
 var retryGame;
 var endGame;
 var nextLevel;
+var undoTurn;
 var stickNumber;
 
 var map_width,map_height;
 var switches;
 var map_code;
 var map;
+
+var backup_map;
+var backup_zombies;
+var backup_stick;
 
 var mouse_x;
 var mouse_y;
@@ -20,7 +25,7 @@ var pause=false;
 var PLAYER_ABSOLUTE_X=400;
 var PLAYER_ABSOLUTE_Y=260;
 
-var zombies=function(){
+function createZombies(){
 	var arr=[];
 	
 	return{
@@ -105,9 +110,19 @@ var zombies=function(){
 			},
 			getZombies:function(){
 				return arr;
+			},
+			getZombiesCopy:function(){
+				var copy=createZombies();
+				for(var i=0;i<arr.length;i++){
+					var ch=arr[i].getMovingChar();
+					copy.addZombie(ch.getAbsoluteX(),ch.getAbsoluteY(),ch.getAngle());
+				}
+				return copy;
 			}
 	}
-}();
+}
+
+var zombies=createZombies();
 
 var player=function(){
 	var character=movingChar();
@@ -180,6 +195,22 @@ var player=function(){
 		}
 	}
 }();
+
+function getMapCopy(){
+	var newMap=[];
+	for(var j=0;j<map_width;j++){
+		var line=[];
+		for(var i=0;i<map_height;i++)
+			line.push(map[j][i]);
+		newMap.push(line);
+	}
+	return newMap;
+}
+
+function undo(){
+	undoTurn=true;
+	$("#undo_button").attr("disabled",true);
+}
 
 function getTile(x,y){
 	if(x>=0 && x<map_width && y>=0 && y<map_height)
@@ -293,7 +324,16 @@ function playerOnFinish(player){
 	return (Math.sqrt(xDist*xDist+yDist*yDist)<0.4);
 }
 
-function playFrame(ctx,map){
+function playFrame(ctx){
+	if(undoTurn){
+		player.setInPlay(false);
+		undoTurn=false;
+		map=backup_map;
+		zombies=backup_zombies;
+		stickNumber[backup_stick]++;
+		setButtonNumbers();
+		enableStick(backup_stick);
+	}
 	if(pause){
 		$("#pause").show();
 		return false;
@@ -335,8 +375,11 @@ function playFrame(ctx,map){
 			player.setInPlay(false);
 		else{
 			showPlayer(ctx);
-			if(playerOnFinish(player))
+			if(playerOnFinish(player)){
+				$("#undo_button").attr("disabled",true);
+				undoGame=false;
 				return true;
+			}
 		}
 	}
 	else{
@@ -405,7 +448,7 @@ function actions(interval,ctx,mapNumber,map,map_code){
 	}
 	else
 		if(!endGame)
-			if(playFrame(ctx,map)){
+			if(playFrame(ctx)){
 				endGame=true;
 				if(mapNumber>=cleared){
 					cleared=mapNumber+1;
@@ -433,6 +476,17 @@ function disableZeroes(){
 		$("#fighter_game").attr("disabled",true);
 	if(stickNumber[5]==0)
 		$("#nothing_game").attr("disabled",true);
+}
+
+function enableStick(num){
+	switch(num){
+		case 0: $("#bridges_game").attr("disabled",false); break;
+		case 1: $("#switches_game").attr("disabled",false); break;
+		case 2: $("#walls_game").attr("disabled",false); break;
+		case 3: $("#thrower_game").attr("disabled",false); break;
+		case 4: $("#fighter_game").attr("disabled",false); break;
+		case 5: $("#nothing_game").attr("disabled",false); break;
+	}
 }
 
 function setButtonNumbers(){
@@ -495,6 +549,7 @@ function readData(map_code){
 
 function sendStickman(num){
 	if(!pause){
+		$("#undo_button").attr("disabled",false);
 		stickNumber[num]--;
 		setButtonNumbers();
 		player.setType(num);
@@ -503,6 +558,9 @@ function sendStickman(num){
 			zombies.addZombie(ch.getAbsoluteX(),ch.getAbsoluteY(),ch.getAngle());
 		}
 		player.setInPlay(true);
+		backup_map=getMapCopy();
+		backup_zombies=zombies.getZombiesCopy();
+		backup_stick=num;
 	}
 }
 
@@ -570,6 +628,8 @@ function play(mapNumber,map_code){
 	endGame=false;
 	nextLevel=false;
 	pause=false;
+	undoGame=false;
+	$("#undo_button").attr("disabled",true);
 	zombies.reset();
 	document.getElementById("bgMusicTitle").pause();
 	document.getElementById("bgMusicEditor").pause();
