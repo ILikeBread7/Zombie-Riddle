@@ -452,7 +452,9 @@ function actions(interval,ctx,mapNumber,map,map_code){
 				endGame=true;
 				if(mapNumber>=cleared){
 					cleared=mapNumber+1;
-					document.cookie="cleared="+cleared+"; expires=19 Jan 2038 03:14:07 UTC; max-age="+60*60*24*365*60+";";
+					var date=new Date();
+					date.setYear(date.getYear()+10);
+					document.cookie='cleared='+cleared+'; expires='+date.toUTCString()+'; max-age='+60*60*24*365*60+';';
 					setClearedLevels();
 				}
 				if(mapNumber>=0 && mapNumber<levels-1)

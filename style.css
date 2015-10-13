@@ -39,7 +39,7 @@ div#instr_div{
 	position:absolute;
 	padding:8px;
 	background: rgba(0, 0, 0, 0.8);
-	top:312px;
+	top:265px;
 	left:92px;
 	color:#ffffff;
 	width:600px;
@@ -122,6 +122,11 @@ button#custom_play:hover{
 img{
 	display:none;
 }
+img#instructions_img{
+	display:block;
+	float:right;
+	margin-left:9px;
+}
 canvas#canv{
 	background:url("title_screen.jpg");
 }
@@ -160,10 +165,10 @@ button.level_button{
 	height:60px;
 	border:2px solid #000099;
 	border-radius:30px;
-	font-size:10px;
+	font-size:9px;
 }
 button.level_button:hover{
-	font-size:10px;
+	font-size:9px;
 	border:3px solid #990000;
 	border-radius:30px;
 }

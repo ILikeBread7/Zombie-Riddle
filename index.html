@@ -30,10 +30,15 @@
 		<button class="main_menu" id="level_editor" onclick="this.blur(); levelEditAction();">LEVEL EDITOR</button>
 		<button class="instr" id="go_back" onclick="this.blur(); goBackInstr();">BACK</button>
 		<div class="instr" id="instr_div">
-			Your goal is to get to the end of each level.
-			In order to do this you have to build bridges, use switches and destroy walls.
-			You can use stickmen to do these tasks. Every type of stickman is good for only one task, however when the task is done or the time runs out your friend will turn into a zombie and is going to assault everyone you send in next.
-			Unfortunately only one type of stickman is capable of fighting (that is before becoming a zombie).
+			<img id="instructions_img" src="instructions.png"></img>
+			WASD/Arrows - movement/scrolling the map<br/>
+			Mouse - direction of walking (your character follows the mouse cursor)</br>
+			Left click - action<br/><br/>
+			Every type of stickman can perform only one type of action (except for one who can do nothing).
+			Your characters turn into zombies after you use them or after they get caught by another zombie.
+			One type of stickman can fight the zombies (and they don't turn into a zombie after being used once like the others).
+			You can use your stickmen to put bridges over holes, to break walls or to press switches (switches make spikes go in and out of the floor).
+			Your goal is to get to a blue tile at the end of each level.
 		</div>
 		<div class="start" id="levels"></div>
 		<div class="start" id="custom_levels">
