@@ -5,10 +5,7 @@ body{
 	color:#000000;
 }
 p{
-	font-size:12px;
-	font-weight:900;
-	color:#ffffff;
-	text-align:right;
+	
 }
 a{
 	color:#ffffff;
@@ -17,9 +14,27 @@ p#signature{
 	position:absolute;
 	top:540px;
 	left:560px;
+	font-size:12px;
+	font-weight:900;
+	color:#ffffff;
+	text-align:right;
 }
 input#volume{
 	width:70px;
+}
+div#loading{
+	position:absolute;
+	top:0px;
+	left:0px;
+	background-color:#454545;
+	width:800px;
+	height:600px;
+	font-size:24px;
+	text-align:center;
+	color:#ffffff;
+}
+div#after_loading{
+	display:none;
 }
 div#volume_control{
 	position:absolute;

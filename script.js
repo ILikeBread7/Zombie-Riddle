@@ -354,5 +354,8 @@ function init(){
 	var editor_canv=document.getElementById("editor_canv");
 	editor_canv.addEventListener("mousedown",editorClick);
 	editor_canv.addEventListener("mouseup",editorUnclick);
+	$("#loading").hide();
+	$("#after_loading").show();
+	playMusic(document.getElementById("bgMusicTitle"));
 	mainMenu(ctx);
 }
