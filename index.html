@@ -72,8 +72,8 @@
 				<canvas id="editor_canv" width="0" height="0"></canvas>
 			</div>
 			<div id="width_height" class="level_editor">
-				Width: <input type="number" min="1" value="1" class="width_height" id="width" onkeydown="if(event.keyCode==13) $('#apply_wh').click();"></input>
-				Height: <input type="number" min="1" value="1" class="width_height" id="height" onkeydown="if(event.keyCode==13) $('#apply_wh').click();"></input>
+				Width: <input type="number" min="1" value="10" class="width_height" id="width" onkeydown="if(event.keyCode==13) $('#apply_wh').click();"></input>
+				Height: <input type="number" min="1" value="10" class="width_height" id="height" onkeydown="if(event.keyCode==13) $('#apply_wh').click();"></input>
 				<button id="apply_wh" onclick="editorMapSize();">Change map size</button>
 			</div>
 			<button id="test_play" class="level_editor" onclick="stopChoosingDoors(false); play(-1);">Test play</button>

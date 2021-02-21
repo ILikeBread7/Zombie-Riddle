@@ -97,6 +97,9 @@ function editorMapSize(){
 	var editCanv=document.getElementById("editor_canv");
 	var w=$("#width").val();
 	var h=$("#height").val();
+	if (w == editor_map_width && h == editor_map_height) {
+		return;
+	}
 	editCanv.width=w*40;
 	editCanv.height=h*40;
 	adjustMap(w,h);
@@ -320,6 +323,7 @@ function levelEditAction(){
 	$("#go_back").css("top", "555px");
 	$("#go_back").show();
 	$(".level_editor").show();
+	editorMapSize();
 	$("#chosen_doors").hide();
 	document.getElementById("bgMusicTitle").pause();
 	playMusic(document.getElementById("bgMusicEditor"));
