@@ -247,7 +247,6 @@ function disableAll(disable){
 	$("#bridges_game").attr("disabled",disable);
 	$("#switches_game").attr("disabled",disable);
 	$("#walls_game").attr("disabled",disable);
-	$("#thrower_game").attr("disabled",disable);
 	$("#fighter_game").attr("disabled",disable);
 	$("#nothing_game").attr("disabled",disable);
 }
@@ -472,8 +471,6 @@ function disableZeroes(){
 		$("#switches_game").attr("disabled",true);
 	if(stickNumber[2]==0)
 		$("#walls_game").attr("disabled",true);
-	if(stickNumber[3]==0)
-		$("#thrower_game").attr("disabled",true);
 	if(stickNumber[4]==0)
 		$("#fighter_game").attr("disabled",true);
 	if(stickNumber[5]==0)
@@ -485,7 +482,6 @@ function enableStick(num){
 		case 0: $("#bridges_game").attr("disabled",false); break;
 		case 1: $("#switches_game").attr("disabled",false); break;
 		case 2: $("#walls_game").attr("disabled",false); break;
-		case 3: $("#thrower_game").attr("disabled",false); break;
 		case 4: $("#fighter_game").attr("disabled",false); break;
 		case 5: $("#nothing_game").attr("disabled",false); break;
 	}
@@ -495,7 +491,6 @@ function setButtonNumbers(){
 	$("#bridges_div").html(stickNumber[0]);
 	$("#switches_div").html(stickNumber[1]);
 	$("#walls_div").html(stickNumber[2]);
-	$("#thrower_div").html(stickNumber[3]);
 	$("#fighter_div").html(stickNumber[4]);
 	$("#nothing_div").html(stickNumber[5]);
 	disableZeroes();
@@ -625,7 +620,7 @@ function moveToNextLevel(){
 	nextLevel=true;
 }
 
-function play(mapNumber,map_code){
+async function play(mapNumber,map_code){
 	exitGame=false;
 	endGame=false;
 	nextLevel=false;
@@ -643,7 +638,7 @@ function play(mapNumber,map_code){
 		if(mapNumber==-2)
 			map_code=$("#level_code").val();
 		if(mapNumber>=0)
-			map_code=readMap(mapNumber);
+			map_code = await readMap(mapNumber);
 	}
 	if(mapNumber>=0)
 		$("#level_text").html("Level: "+(mapNumber+1));

@@ -7,9 +7,9 @@ var choosing_doors;
 var editor_map_width;
 var editor_map_height;
 
-function countLevels(){
+async function countLevels(){
 	var result;
-	$.ajax({
+	await $.ajax({
 		url:"levels/levels.txt",
 		dataType:"text",
 		async:false,
@@ -78,9 +78,9 @@ function setCleared(i,cleared){
 	if(cleared<i)
 		deactivateLevel(s);
 }
-function startLevel(num){
+async function startLevel(num){
 	if($("#level"+num).hasClass("level_active") || $("#level"+num).hasClass("level_cleared"))
-		play(num);
+		await play(num);
 }
 function adjustMap(w,h){
 	editor_map=[];
@@ -293,7 +293,7 @@ function editorUnclick(event){
 	}
 }
 function setClearedLevels(){
-	for(var i=0;$("#level"+i).length>0;i++)
+	for(var i=0;$("#level"+i);i++)
 		setCleared(i,cleared);
 }
 function startAction(){
@@ -336,10 +336,11 @@ function goBackInstr(){
 function addLevels(levels){
 	for(var i=0;i<levels;i++){
 		var button="<button class=\"level_button\" id=\"level"+i+"\" onclick=\"this.blur(); startLevel("+i+");\">Level "+(i+1)+"</button>";
-		$("#levels").append(button);
+		const levelsDiv = $("#levels");
+		levelsDiv.innerHTML += button;
 	}
 }
-function init(){
+async function init(){
 	var canv=document.getElementById("canv");
 	canv.addEventListener("mousemove",mouseMoveListener);
 	document.addEventListener("keydown",keyListener);
@@ -348,7 +349,7 @@ function init(){
 	var ctx=canv.getContext("2d");
 	var cookies=document.cookie;
 	cleared=readCookie("cleared",cookies);
-	levels=countLevels();
+	levels = await countLevels();
 	editor_tile="floor";
 	addLevels(levels);
 	var editor_canv=document.getElementById("editor_canv");
