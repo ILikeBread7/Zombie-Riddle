@@ -7,6 +7,29 @@ var choosing_doors;
 var editor_map_width;
 var editor_map_height;
 
+var sound_enabled = false;
+var initialized = false;
+
+function enableSound() {
+	sound_enabled = true;
+	hideEnableSoundDiv();
+	if (initialized) {
+		playMusic(document.getElementById("bgMusicTitle"));
+	}
+}
+
+function disableSound() {
+	sound_enabled = false;
+	const volume = document.getElementById("volume");
+	volume.value = 0;
+	changeVol();
+	hideEnableSoundDiv();
+}
+
+function hideEnableSoundDiv() {
+	$("#enable_sound").hide();
+}
+
 async function countLevels(){
 	var result;
 	await $.ajax({
@@ -361,6 +384,9 @@ async function init(){
 	editor_canv.addEventListener("mouseup",editorUnclick);
 	$("#loading").hide();
 	$("#after_loading").show();
-	playMusic(document.getElementById("bgMusicTitle"));
+	if (enableSound) {
+		playMusic(document.getElementById("bgMusicTitle"));
+	}
 	mainMenu(ctx);
+	initialized = true;
 }
