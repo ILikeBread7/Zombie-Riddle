@@ -330,6 +330,9 @@ div.editor_char, button.char{
 	border-radius:5px;
 	text-align:center;
 }
+button.char:hover {
+	border: 4px inset #ff0;
+}
 div#bridges, button#bridges_game{
 	background-image:url("bridges.png");
 }
@@ -437,6 +440,68 @@ div#chars{
 	top:10px;
 	left:265px;
 }
+div#char_instructions {
+	text-align: center;
+	color: #fff;
+	position:absolute;
+	left: 0px;
+	top: 265px;
+	width: 800px;
+	height: 265px;
+	padding: 5px;
+	background-color: rgba(0,0,0,0.8);
+}
+
+div#choose_char_div {
+	position: absolute;
+	width: 100%;
+	text-align: center;
+	bottom: 25px;
+}
+
+span#zombie_x {
+	position: absolute;
+	left: 82px;
+	top: 8px;
+	color: #f00;
+	font-size: 42px;
+}
+
+@keyframes arrow_animation {
+	0% { top: 0px }
+	50% { top: 10px }
+	100% { top: 0px }
+}
+
+div#arrow {
+	position: relative;
+	font-size: 32px;
+	animation-name: arrow_animation;
+	animation-duration: 1s;
+	animation-iteration-count: infinite;
+}
+
+div.char_instruction_div {
+	display: none;
+	position: relative;
+	top: 6px;
+}
+
+img.char_instruction_img {
+	display: inline-block;
+}
+
+span.right_arrow {
+	font-size: 24px;
+	position: relative;
+	top: -15px;
+}
+
+.hide_instructions {
+	opacity: 0;
+	transition: opacity 0.3s linear;
+}
+
 div.button_div{
 	width:30px;
 	height:15px;

@@ -10,6 +10,14 @@ var editor_map_height;
 var sound_enabled = false;
 var initialized = false;
 
+function showCharInstructions(charId) {
+	$('#char_instruction_div_' + charId).show();
+}
+
+function hideCharInstructions() {
+	$('.char_instruction_div').hide();
+}
+
 function enableSound() {
 	sound_enabled = true;
 	hideEnableSoundDiv();

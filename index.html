@@ -27,7 +27,7 @@
 		<div id="after_loading">
 		
 			<div id="win_div">
-				Stage cleared!<br/>
+				Stage completed!<br/>
 				<button class="win_button" onclick="retry();">Retry</button>
 				<button class="win_button" id="next_level" onclick="moveToNextLevel();">Next Level</button>
 				<button class="win_button" onclick="exit();">Exit</button>
@@ -128,17 +128,72 @@
 			<audio loop id="bgMusicEditor">
 				<source src="POL-love-line-short.mp3" type="audio/mpeg">
 			</audio>
+			<div id="char_instructions" class="in_game">
+				<div>
+					Go to a blue tile! <img class="char_instruction_img" src="finish_point.png"></img><br>
+					WASD/Arrows - movement/scrolling the map.<br>
+					Mouse - direction of walking (your character follows the mouse cursor).<br>
+					Left click - action.<br>
+					You can only use a limited number of each type of character.
+				</div>
+				<div id="char_instruction_div_0" class="char_instruction_div">
+					Can create bridges over holes (black tiles).
+					<div>
+						<img class="char_instruction_img" src="hole.png"></img>
+							<span class="right_arrow">→</span>
+						<img class="char_instruction_img" src="bridge.png"></img>
+					</div>
+				</div>
+				<div id="char_instruction_div_1" class="char_instruction_div">
+					Can press switches to toggle spike tiles (different switches work for different tiles).
+					<div>
+						<img class="char_instruction_img" src="switch.png"></img>
+
+						<span style="padding-left: 30px; padding-right: 30px;">
+							<img class="char_instruction_img" src="door.png"></img>
+								<span class="right_arrow">→</span>
+							<img class="char_instruction_img" src="open_door.png"></img>
+						</span>
+
+						<img class="char_instruction_img" src="open_door.png"></img>
+							<span class="right_arrow">→</span>
+						<img class="char_instruction_img" src="door.png"></img>
+					</div>
+				</div>
+				<div id="char_instruction_div_2" class="char_instruction_div">
+					Can punch through brick walls to remove them.
+					<div>
+						<img class="char_instruction_img" src="wall.png"></img>
+							<span class="right_arrow">→</span>
+						<img class="char_instruction_img" src="floor.png"></img>
+					</div>
+				</div>
+				<div id="char_instruction_div_4" class="char_instruction_div">
+					Can kill zombies.
+					<div>
+						<img class="char_instruction_img" src="zombie.png"></img>
+							<span class="right_arrow">→</span>
+						<img class="char_instruction_img" src="zombie.png"></img>
+						<span id="zombie_x">✘</span>
+					</div>
+				</div>
+				<div id="char_instruction_div_5" class="char_instruction_div">Does nothing special.</div>
+				<div id="choose_char_div">
+					Choose a character
+					<div id="arrow">↓</div>
+				</div>
+			</div>
 			<div id="lower_panel" class="in_game">
 				<button class="game_button" id="exit" onclick="this.blur(); exit();">EXIT</button>
 				<button class="game_button" id="retry" onclick="this.blur(); retry();">RETRY</button>
 				<div id="chars">
-					<button class="char" id="bridges_game" onclick="this.blur(); sendStickman(0);">
+					<button class="char" id="bridges_game" onclick="this.blur(); sendStickman(0);" onmouseover="showCharInstructions(0);" onmouseout="hideCharInstructions();">
 						<div class="button_div" id="bridges_div">0</div>
 					</button>
-					<button class="char" id="switches_game" onclick="this.blur(); sendStickman(1);">
+					<button class="char" id="switches_game" onclick="this.blur(); sendStickman(1);" onmouseover="showCharInstructions(1);" onmouseout="hideCharInstructions();">
 						<div class="button_div" id="switches_div">0</div>
 					</button>
-					<button class="char" id="walls_game" onclick="this.blur(); sendStickman(2);">
+					<button class="char" id="walls_game" onclick="this.blur(); sendStickman(2);" onmouseover="showCharInstructions(2);" onmouseout="hideCharInstructions();">
 						<div class="button_div" id="walls_div">0</div>
 					</button>
 					
@@ -148,10 +203,10 @@
 					</button>
 					-->
 					
-					<button class="char" id="fighter_game" onclick="this.blur(); sendStickman(4);">
+					<button class="char" id="fighter_game" onclick="this.blur(); sendStickman(4);" onmouseover="showCharInstructions(4);" onmouseout="hideCharInstructions();">
 						<div class="button_div" id="fighter_div">0</div>
 					</button>
-					<button class="char" id="nothing_game" onclick="this.blur(); sendStickman(5);">
+					<button class="char" id="nothing_game" onclick="this.blur(); sendStickman(5);" onmouseover="showCharInstructions(5);" onmouseout="hideCharInstructions();">
 						<div class="button_div" id="nothing_div">0</div>
 					</button>
 					

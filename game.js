@@ -164,6 +164,7 @@ var player=function(){
 			else{
 				timer=0;
 				zombies.addZombie(character.getAbsoluteX(),character.getAbsoluteY(),character.getAngle());
+				showCharacterInstructions();
 			}
 		},
 		setType:function(num){
@@ -546,6 +547,7 @@ function readData(map_code){
 
 function sendStickman(num){
 	if(!pause){
+		hideCharacterInstructions();
 		$("#undo_button").attr("disabled",false);
 		stickNumber[num]--;
 		setButtonNumbers();
@@ -559,6 +561,21 @@ function sendStickman(num){
 		backup_zombies=zombies.getZombiesCopy();
 		backup_stick=num;
 	}
+}
+
+function showCharacterInstructions() {
+	const charInstructionsDiv = $('#char_instructions');
+	charInstructionsDiv.show();
+}
+
+function hideCharacterInstructions() {
+	const charInstructionsDiv = $('#char_instructions');
+	setTimeout(function() {
+		charInstructionsDiv.hide();
+		charInstructionsDiv.removeClass('hide_instructions');
+		hideCharInstructions();
+	}, 500);
+	charInstructionsDiv.addClass('hide_instructions');
 }
 
 function handleSwitchPress(x,y){
