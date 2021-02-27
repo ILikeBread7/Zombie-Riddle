@@ -223,6 +223,7 @@ function mouseMoveListener(event){
 	var rect=document.getElementById("editor_canv").getBoundingClientRect();
 	mouse_x=event.pageX-rect.left;
 	mouse_y=event.pageY-rect.top;
+	var ch=player.getMovingChar();
 }
 function keyListener(event){
 	if(event.type=='keydown'){
@@ -254,9 +255,26 @@ function disableAll(disable){
 
 function showTile(ctx,map,x,y){
 	var ch=player.getMovingChar();
+	const targetX = Math.floor(ch.getTargetX());
+	const targetY = Math.floor(ch.getTargetY());
+	const targetTile = getTile(targetX, targetY);
 	if(x>=0 && x<map_width && y>=0 && y<map_height){
 		var img=document.getElementById(getTileName(map[x][y])+"_img");
 		ctx.drawImage(img,400+(x-ch.getRealX())*40,260+(y-ch.getRealY())*40);
+		if (player.isInPlay() && [0, 1, 2].includes(player.getType()) && targetX == x && targetY == y) {
+			ctx.beginPath();
+			if (
+				(player.getType() == 0 && targetTile == 14)
+				|| (player.getType() == 1 && targetTile == 12)
+				|| (player.getType() == 2 && targetTile == 10)
+			) {
+				ctx.strokeStyle = '#0f0';
+			} else {
+				ctx.strokeStyle = '#f00';
+			}
+			ctx.lineWidth = 3;
+			ctx.strokeRect(400+(x-ch.getRealX())*40, 260+(y-ch.getRealY())*40, 40, 40);
+		}
 	}
 }
 function showZombies(ctx){
