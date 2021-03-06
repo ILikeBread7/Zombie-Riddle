@@ -25,6 +25,8 @@ var pause=false;
 var PLAYER_ABSOLUTE_X=400;
 var PLAYER_ABSOLUTE_Y=260;
 
+var swordAnimations = [];
+
 function createZombies(){
 	var arr=[];
 	
@@ -277,6 +279,22 @@ function showTile(ctx,map,x,y){
 		}
 	}
 }
+
+function showSwordAnimations(ctx) {
+	for (let i = 0; i < swordAnimations.length; i++) {
+		const sa = swordAnimations[i];
+
+		const img = document.getElementById('fighter');
+		drawRotatedImage(ctx, img, sa.x, sa.y, sa.angle);
+
+		sa.timer ++;
+		if (sa.timer > 60) {
+			sa.finished = true;
+		}
+	}
+	swordAnimations = swordAnimations.filter(sa => !sa.finished);
+}
+
 function showZombies(ctx){
 	var img=document.getElementById("zombie");
 	var arr=zombies.getZombies();
@@ -383,6 +401,7 @@ function playFrame(ctx){
 		zombieArr[i].move();
 	}
 	showZombies(ctx);
+	showSwordAnimations(ctx);
 	if(player.isInPlay()){
 		player.setScrolling(false);
 		decidePlayerAngle();
@@ -639,6 +658,7 @@ function gameClickListener(){
 			var angle=ch.getAngle();
 			var sword_y=y-sword_range*Math.cos(angle);
 			var sword_x=x+sword_range*Math.sin(angle);
+			addSwordAnimation(sword_x, sword_y, angle);
 			
 			var zombieArr=zombies.getZombies();
 			for(var i=0;i<zombieArr.length;i++){
@@ -648,6 +668,15 @@ function gameClickListener(){
 			}
 		}
 	}
+}
+
+function addSwordAnimation(swordX, swordY, angle) {
+	swordAnimations.push({
+		x: swordX,
+		y: swordY,
+		angle: angle,
+		timer: 0
+	});
 }
 
 function moveToNextLevel(){
