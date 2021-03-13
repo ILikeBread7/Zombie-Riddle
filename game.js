@@ -281,11 +281,14 @@ function showTile(ctx,map,x,y){
 }
 
 function showSwordAnimations(ctx) {
+	var playerCh=player.getMovingChar();
+	var playerX=playerCh.getAbsoluteX();
+	var playerY=playerCh.getAbsoluteY();
 	for (let i = 0; i < swordAnimations.length; i++) {
 		const sa = swordAnimations[i];
 
-		const img = document.getElementById('fighter');
-		drawRotatedImage(ctx, img, sa.x, sa.y, sa.angle);
+		const img = document.getElementById('player_0_img');
+		drawRotatedImage(ctx, img, PLAYER_ABSOLUTE_X - (playerX - sa.x) - 20, PLAYER_ABSOLUTE_Y - (playerY - sa.y) - 20, sa.angle);
 
 		sa.timer ++;
 		if (sa.timer > 60) {
@@ -401,7 +404,6 @@ function playFrame(ctx){
 		zombieArr[i].move();
 	}
 	showZombies(ctx);
-	showSwordAnimations(ctx);
 	if(player.isInPlay()){
 		player.setScrolling(false);
 		decidePlayerAngle();
@@ -444,6 +446,7 @@ function playFrame(ctx){
 			player.moveTowardsStart();
 		player.incTimer();
 	}
+	showSwordAnimations(ctx);
 	
 	return false;
 }
