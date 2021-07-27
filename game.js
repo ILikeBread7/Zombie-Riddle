@@ -659,15 +659,27 @@ function gameClickListener(){
 			var y=ch.getCenterY();
 			var sword_range=player.getSwordRange();
 			var angle=ch.getAngle();
-			var sword_y=y-sword_range*Math.cos(angle);
-			var sword_x=x+sword_range*Math.sin(angle);
-			addSwordAnimation(sword_x, sword_y, angle);
-			
+			const sword_cords = [];
+
+			for (let range_diff = 0; range_diff <= 20; range_diff += 10) {
+				for (let angle_diff = -3; angle_diff <= 3; angle_diff++) {
+					var sword_y=y-(sword_range+range_diff)*Math.cos(angle+(angle_diff*Math.PI/12));
+					var sword_x=x+(sword_range+range_diff)*Math.sin(angle+(angle_diff*Math.PI/12));
+					sword_cords.push({ sword_x, sword_y });
+					if (range_diff === 0 && angle_diff === 0) {
+						addSwordAnimation(sword_x, sword_y, angle);
+					}
+				}
+			}
+
 			var zombieArr=zombies.getZombies();
 			for(var i=0;i<zombieArr.length;i++){
 				var ch=zombieArr[i].getMovingChar();
-				if(segmentCircleIntersect(x,y,sword_x,sword_y,ch.getCenterX(),ch.getCenterY(),ch.getRadius()))
-					zombieArr[i].kill();
+				sword_cords.forEach(sc => {
+					const {sword_x, sword_y} = sc;
+					if(segmentCircleIntersect(x,y,sword_x,sword_y,ch.getCenterX(),ch.getCenterY(),ch.getRadius()))
+						zombieArr[i].kill();
+				})
 			}
 		}
 	}
