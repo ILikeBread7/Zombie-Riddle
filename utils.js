@@ -85,3 +85,7 @@ function playMusic(music){
 		music.play();
 	}
 }
+function playSe(se){
+	se.currentTime=0;
+	se.play();
+}

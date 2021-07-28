@@ -166,6 +166,7 @@ var player=function(){
 			else{
 				timer=0;
 				zombies.addZombie(character.getAbsoluteX(),character.getAbsoluteY(),character.getAngle());
+				playSe(document.getElementById('seDead'));
 				showCharacterInstructions();
 			}
 		},
@@ -646,11 +647,13 @@ function gameClickListener(){
 			tile==10 && player.getType()==2){
 				map[tileX][tileY]-=10;
 				player.setInPlay(false);
+				playSe(document.getElementById(tile == 10 ? 'seWall' : 'seBridge'));
 			}
 			
 			if(tile==12 && player.getType()==1){
 				handleSwitchPress(tileX,tileY);
 				player.setInPlay(false);
+				playSe(document.getElementById('seSwitch'));
 			}
 		}
 		if(player.getType()==4){
@@ -668,6 +671,7 @@ function gameClickListener(){
 					sword_cords.push({ sword_x, sword_y });
 					if (range_diff === 0 && angle_diff === 0) {
 						addSwordAnimation(sword_x, sword_y, angle);
+						playSe(document.getElementById('seSword'));
 					}
 				}
 			}
@@ -677,8 +681,10 @@ function gameClickListener(){
 				var ch=zombieArr[i].getMovingChar();
 				sword_cords.forEach(sc => {
 					const {sword_x, sword_y} = sc;
-					if(segmentCircleIntersect(x,y,sword_x,sword_y,ch.getCenterX(),ch.getCenterY(),ch.getRadius()))
+					if(segmentCircleIntersect(x,y,sword_x,sword_y,ch.getCenterX(),ch.getCenterY(),ch.getRadius())) {
 						zombieArr[i].kill();
+						playSe(document.getElementById('seZombie'));
+					}
 				})
 			}
 		}
