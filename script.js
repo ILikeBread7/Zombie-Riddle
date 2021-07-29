@@ -285,7 +285,7 @@ function editorClick(event){
 		arr[0]=x;
 		arr[1]=y;
 		editor_switches[last].push(arr);
-		$("#doors_list").append(x+" "+y+"<br>");
+		$("#doors_list").append(x+" "+y+"\n");
 	}
 	else{
 		var tile=getNum(editor_tile);
