@@ -71,6 +71,18 @@ function changeVol(){
 	audio.volume=volume.value;
 	audio=document.getElementById("bgMusicEditor");
 	audio.volume=volume.value;
+	audio=document.getElementById("seSword");
+	audio.volume=volume.value;
+	audio=document.getElementById("seDead");
+	audio.volume=volume.value;
+	audio=document.getElementById("seZombie");
+	audio.volume=volume.value;
+	audio=document.getElementById("seBridge");
+	audio.volume=volume.value;
+	audio=document.getElementById("seWall");
+	audio.volume=volume.value;
+	audio=document.getElementById("seSwitch");
+	audio.volume=volume.value;
 }
 function mainMenu(ctx){
 	ctx.clearRect(0,0,800,600);
