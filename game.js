@@ -166,7 +166,7 @@ var player=function(){
 			else{
 				timer=0;
 				zombies.addZombie(character.getAbsoluteX(),character.getAbsoluteY(),character.getAngle());
-				playSe(document.getElementById('seDead'));
+				playSe(seDead);
 				showCharacterInstructions();
 			}
 		},
@@ -467,12 +467,11 @@ function actions(interval,ctx,mapNumber,map,map_code){
 	}
 	if(exitGame){
 		clearInterval(interval);
-		document.getElementById("bgMusicGame").pause();
 		if(mapNumber==-1){
 			fill(ctx,"#eeeeee");
 			$(".level_editor").show();
 			$("#chosen_doors").hide();
-			playMusic(document.getElementById("bgMusicEditor"));
+			playMusic(bgMusicEditor);
 		}
 		else{
 			ctx.clearRect(0,0,800,600);
@@ -481,7 +480,7 @@ function actions(interval,ctx,mapNumber,map,map_code){
 			$("#volume_control").removeClass("volume_control_in_level_editor");
 			$("#signature").show();
 			$(".start").show();
-			playMusic(document.getElementById("bgMusicTitle"));
+			playMusic(bgMusicTitle);
 		}
 		$("#pause").hide();
 		$("#go_back").show();
@@ -647,13 +646,13 @@ function gameClickListener(){
 			tile==10 && player.getType()==2){
 				map[tileX][tileY]-=10;
 				player.setInPlay(false);
-				playSe(document.getElementById(tile == 10 ? 'seWall' : 'seBridge'));
+				playSe(tile == 10 ? seWall : seBridge);
 			}
 			
 			if(tile==12 && player.getType()==1){
 				handleSwitchPress(tileX,tileY);
 				player.setInPlay(false);
-				playSe(document.getElementById('seSwitch'));
+				playSe(seSwitch);
 			}
 		}
 		if(player.getType()==4){
@@ -671,7 +670,7 @@ function gameClickListener(){
 					sword_cords.push({ sword_x, sword_y });
 					if (range_diff === 0 && angle_diff === 0) {
 						addSwordAnimation(sword_x, sword_y, angle);
-						playSe(document.getElementById('seSword'));
+						playSe(seSword);
 					}
 				}
 			}
@@ -683,7 +682,7 @@ function gameClickListener(){
 					const {sword_x, sword_y} = sc;
 					if(segmentCircleIntersect(x,y,sword_x,sword_y,ch.getCenterX(),ch.getCenterY(),ch.getRadius())) {
 						zombieArr[i].kill();
-						playSe(document.getElementById('seZombie'));
+						playSe(seZombie);
 					}
 				})
 			}
@@ -713,9 +712,7 @@ async function play(mapNumber,map_code){
 	undoGame=false;
 	$("#undo_button").attr("disabled",true);
 	zombies.reset();
-	document.getElementById("bgMusicTitle").pause();
-	document.getElementById("bgMusicEditor").pause();
-	playMusic(document.getElementById("bgMusicGame"));
+	playMusic(bgMusicGame);
 	var interval;
 	if(map_code==undefined){
 		if(mapNumber==-1)

@@ -19,10 +19,11 @@ function hideCharInstructions() {
 }
 
 function enableSound() {
+	audioHandler.init();
 	sound_enabled = true;
 	hideEnableSoundDiv();
 	if (initialized) {
-		playMusic(document.getElementById("bgMusicTitle"));
+		playMusic(bgMusicTitle);
 	}
 }
 
@@ -64,25 +65,11 @@ function readCookie(name,cookies){
 	return 0;
 }
 function changeVol(){
-	var volume=document.getElementById("volume");
-	var audio=document.getElementById("bgMusicTitle");
-	audio.volume=volume.value;
-	audio=document.getElementById("bgMusicGame");
-	audio.volume=volume.value;
-	audio=document.getElementById("bgMusicEditor");
-	audio.volume=volume.value;
-	audio=document.getElementById("seSword");
-	audio.volume=volume.value;
-	audio=document.getElementById("seDead");
-	audio.volume=volume.value;
-	audio=document.getElementById("seZombie");
-	audio.volume=volume.value;
-	audio=document.getElementById("seBridge");
-	audio.volume=volume.value;
-	audio=document.getElementById("seWall");
-	audio.volume=volume.value;
-	audio=document.getElementById("seSwitch");
-	audio.volume=volume.value;
+	const volume = document.getElementById("volume").value;
+	audioHandler.changeVolume(volume);
+	if (volume > 0) {
+		playMusic(bgmToPlay);
+	}
 }
 function mainMenu(ctx){
 	ctx.clearRect(0,0,800,600);
@@ -92,9 +79,9 @@ function mainMenu(ctx){
 	$("#volume_control").removeClass("volume_control_in_level_editor");
 	$(".controls").show();
 	$("#signature").show();
-	document.getElementById("bgMusicEditor").pause();
-	document.getElementById("bgMusicGame").pause();
-	playMusic(document.getElementById("bgMusicTitle"));
+	if (initialized) {
+		playMusic(bgMusicTitle);
+	}
 }
 
 function clearLevel(s){
@@ -368,8 +355,7 @@ function levelEditAction(){
 	$(".level_editor").show();
 	editorMapSize();
 	$("#chosen_doors").hide();
-	document.getElementById("bgMusicTitle").pause();
-	playMusic(document.getElementById("bgMusicEditor"));
+	playMusic(bgMusicEditor);
 }
 function goBackInstr(){
 	$(".instr").hide();
@@ -405,7 +391,7 @@ async function init(){
 	$("#loading").hide();
 	$("#after_loading").show();
 	if (enableSound) {
-		playMusic(document.getElementById("bgMusicTitle"));
+		audioHandler.init();
 	}
 	mainMenu(ctx);
 	initialized = true;

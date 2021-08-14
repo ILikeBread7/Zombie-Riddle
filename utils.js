@@ -79,13 +79,123 @@ function segmentCircleIntersect(ax,ay,bx,by,cx,cy,r){
 
 	return false;
 }
-function playMusic(music){
-	if(music.paused){
-		music.currentTime=0;
-		music.play();
+
+const bgMusicTitle = 'POL-antique-market-short.mp3';
+const bgMusicGame = 'POL-stealth-mode-short.mp3';
+const bgMusicEditor = 'POL-love-line-short.mp3';
+const seSword = 'laser5.ogg';
+const seDead = 'laser5.ogg';
+const seZombie = 'Skeleton Roar.ogg';
+const seBridge = 'laser5.ogg';
+const seWall = 'laser5.ogg';
+const seSwitch = 'laser5.ogg';
+
+let bgmToPlay = bgMusicTitle;
+
+const audioHandler = (() => {
+	const trackNames = [
+		bgMusicTitle,
+		bgMusicGame,
+		bgMusicEditor,
+		seSword,
+		seDead,
+		seZombie,
+		seBridge,
+		seWall,
+		seSwitch
+	];
+
+	const trackVolumes = new Map([
+		[bgMusicTitle, 1],
+		[bgMusicGame, 1],
+		[bgMusicEditor, 1],
+		[seSword, 1],
+		[seDead, 1],
+		[seZombie, 1],
+		[seBridge, 1],
+		[seWall, 1],
+		[seSwitch, 1]
+	]);
+
+	let tracksMapPromise = null;
+	let audioCtx = null;
+	let globalVolume = 1;
+
+	const playFunc = (track, loop, volume) => {
+		const audioBuffer = track;
+		const trackSource = audioCtx.createBufferSource();
+
+		const gainNode = audioCtx.createGain();
+		trackSource.loop = loop;
+		trackSource.buffer = audioBuffer;
+		trackSource.connect(gainNode).connect(audioCtx.destination);
+
+		gainNode.gain.value = volume * globalVolume;
+
+		trackSource.start();
+		return { trackSource, gainNode };
 	}
+
+
+	let currentBgm = { name: null, track: null };
+
+	return {
+		init: function() {
+			if (tracksMapPromise !== null) {
+				return;
+			}
+			tracksMapPromise = (async () => {
+				const AudioContext = window.AudioContext || window.webkitAudioContext;
+				audioCtx = new AudioContext();
+		
+				const tracks = await Promise.all(trackNames.map(async trackName => {
+					const response = await fetch(`audio/${trackName}`);
+					const arrayBuffer = await response.arrayBuffer();
+					const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+					return audioBuffer;
+				}));
+			
+				return new Map((() => {
+					const result = [];
+					for (let i = 0; i < trackNames.length; i++) {
+						result.push([trackNames[i], tracks[i]]);
+					}
+					return result;
+				})());
+			})();
+		},
+		playBgm: function(trackName) {
+			if (trackName === currentBgm.name) {
+				return;
+			}
+			tracksMapPromise.then(tm => {
+				const track = tm.get(trackName);
+				if (currentBgm.track !== null) {
+					currentBgm.track.trackSource.stop();
+				}
+				currentBgm = { name: trackName, track: playFunc(track, true, trackVolumes.get(trackName)) };
+			});
+		},
+		playEffect: function(trackName) {
+			tracksMapPromise.then(tm => {
+				const track = tm.get(trackName);
+				playFunc(track, false, trackVolumes.get(trackName));
+			});
+		},
+		changeVolume(volume) {
+			globalVolume = volume;
+			if (currentBgm && currentBgm.track) {
+				currentBgm.track.gainNode.gain.value = trackVolumes.get(currentBgm.name) * globalVolume;
+			}
+		}
+	};
+
+})();
+
+function playMusic(music){
+	bgmToPlay = music;
+	audioHandler.playBgm(music);
 }
 function playSe(se){
-	se.currentTime=0;
-	se.play();
+	audioHandler.playEffect(se);
 }
