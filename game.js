@@ -502,6 +502,7 @@ function actions(interval,ctx,mapNumber,map,map_code){
 				else
 					$("#next_level").hide();
 				$("#win_div").show();
+				playSe(seWin);
 			}
 }
 

@@ -83,12 +83,13 @@ function segmentCircleIntersect(ax,ay,bx,by,cx,cy,r){
 const bgMusicTitle = 'POL-antique-market-short.mp3';
 const bgMusicGame = 'POL-stealth-mode-short.mp3';
 const bgMusicEditor = 'POL-love-line-short.mp3';
-const seSword = 'laser5.ogg';
-const seDead = 'laser5.ogg';
-const seZombie = 'Skeleton Roar.ogg';
-const seBridge = 'laser5.ogg';
-const seWall = 'laser5.ogg';
-const seSwitch = 'laser5.ogg';
+const seSword = 'sword.wav';
+const seDead = 'dead.wav';
+const seZombie = 'zombie.wav';
+const seBridge = 'bridge.wav';
+const seWall = 'wall.wav';
+const seSwitch = 'switch.wav';
+const seWin = 'win.wav';
 
 let bgmToPlay = bgMusicTitle;
 
@@ -102,19 +103,21 @@ const audioHandler = (() => {
 		seZombie,
 		seBridge,
 		seWall,
-		seSwitch
+		seSwitch,
+		seWin
 	];
 
 	const trackVolumes = new Map([
-		[bgMusicTitle, 1],
-		[bgMusicGame, 1],
-		[bgMusicEditor, 1],
-		[seSword, 1],
-		[seDead, 1],
-		[seZombie, 1],
-		[seBridge, 1],
-		[seWall, 1],
-		[seSwitch, 1]
+		[bgMusicTitle, 0.5],
+		[bgMusicGame, 0.5],
+		[bgMusicEditor, 0.5],
+		[seSword, 2],
+		[seDead, 2.5],
+		[seZombie, 2],
+		[seBridge, 2],
+		[seWall, 2],
+		[seSwitch, 2],
+		[seWin, 2]
 	]);
 
 	let tracksMapPromise = null;
