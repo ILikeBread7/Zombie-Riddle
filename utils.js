@@ -108,16 +108,16 @@ const audioHandler = (() => {
 	];
 
 	const trackVolumes = new Map([
-		[bgMusicTitle, 0.5],
-		[bgMusicGame, 0.5],
-		[bgMusicEditor, 0.5],
-		[seSword, 2],
-		[seDead, 2.5],
-		[seZombie, 2],
-		[seBridge, 2],
-		[seWall, 2],
-		[seSwitch, 2],
-		[seWin, 2]
+		[bgMusicTitle, 0.4],
+		[bgMusicGame, 0.4],
+		[bgMusicEditor, 0.4],
+		[seSword, 0.8],
+		[seDead, 1],
+		[seZombie, 0.8],
+		[seBridge, 0.8],
+		[seWall, 0.8],
+		[seSwitch, 0.8],
+		[seWin, 0.8]
 	]);
 
 	let tracksMapPromise = null;
