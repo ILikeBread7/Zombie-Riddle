@@ -12,10 +12,12 @@ var initialized = false;
 
 function showCharInstructions(charId) {
 	$('#char_instruction_div_' + charId).show();
+	$('#char_instructions_common').show();
 }
 
 function hideCharInstructions() {
 	$('.char_instruction_div').hide();
+	$('#char_instructions_common').hide();
 }
 
 function enableSound() {

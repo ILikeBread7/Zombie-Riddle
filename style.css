@@ -108,8 +108,8 @@ div#pause{
 	position:absolute;
 	padding:8px;
 	background: rgba(0, 0, 0, 0.8);
-	top:400px;
-	left:192px;
+	top:300px;
+	left:402px;
 	color:#ffffff;
 	width:400px;
 	font-size:32px;
@@ -343,9 +343,6 @@ div#switches, button#switches_game{
 div#walls, button#walls_game{
 	background-image:url("walls.png");
 }
-div#thrower, button#thrower_game{
-	background-image:url("thrower.png");
-}
 div#fighter, button#fighter_game{
 	background-image:url("fighter.png");
 }
@@ -446,24 +443,36 @@ div#char_instructions {
 	color: #fff;
 	position:absolute;
 	left: 0px;
-	top: 385px;
+	top: 585px;
 	width: 1280px;
-	height: 265px;
+	height: 60px;
 	padding: 5px;
 	background-color: rgba(0,0,0,0.8);
+}
+
+div#char_instructions_common {
+	text-align: center;
+	color: #fff;
+	position:absolute;
+	left: 0px;
+	top: 150px;
+	width: 1280px;
+	padding: 5px;
+	background-color: rgba(0,0,0,0.8);
+	display: none;
 }
 
 div#choose_char_div {
 	position: absolute;
 	width: 100%;
 	text-align: center;
-	bottom: 25px;
+	bottom: 20px;
 }
 
 span#zombie_x {
 	position: absolute;
-	left: 82px;
-	top: 16px;
+	left: 38px;
+	top: 36px;
 	color: #f00;
 	font-size: 42px;
 }

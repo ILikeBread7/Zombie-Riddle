@@ -119,7 +119,7 @@
 				Music from: <a target="_blank" href="http://www.playonloop.com/">http://www.playonloop.com/</a><br/>
 				under <a target="_blank" href="http://creativecommons.org/licenses/by/3.0/legalcode">CC-BY 3.0 License</a>
 			</p>
-			<div id="char_instructions" class="in_game">
+			<div id="char_instructions_common">
 				<div>
 					Go to any blue tile! <img class="char_instruction_img" src="finish_point.png"></img><br>
 					WASD/Arrows - movement/scrolling the map.<br>
@@ -127,7 +127,10 @@
 					Left click - action.<br>
 					You can only use a limited number of each type of character.
 				</div>
+				<br>
 				<div id="char_instruction_div_0" class="char_instruction_div">
+					<img class="char_instruction_img" src="bridges.png"></img>
+					<br>
 					Can create bridges over holes (black tiles).
 					<div>
 						<img class="char_instruction_img" src="hole.png"></img>
@@ -136,30 +139,35 @@
 					</div>
 				</div>
 				<div id="char_instruction_div_1" class="char_instruction_div">
+					<img class="char_instruction_img" src="switches.png"></img>
+					<br>
 					Can press switches to toggle spike tiles (different switches work for different tiles).
 					<div>
 						<img class="char_instruction_img" src="switch.png"></img>
-
 						<span style="padding-left: 30px; padding-right: 30px;">
 							<img class="char_instruction_img" src="door.png"></img>
 								<span class="right_arrow">></span>
 							<img class="char_instruction_img" src="open_door.png"></img>
 						</span>
-
+	
 						<img class="char_instruction_img" src="open_door.png"></img>
 							<span class="right_arrow">></span>
 						<img class="char_instruction_img" src="door.png"></img>
 					</div>
 				</div>
 				<div id="char_instruction_div_2" class="char_instruction_div">
+					<img class="char_instruction_img" src="walls.png"></img>
+					<br>
 					Can punch through brick walls to remove them.
 					<div>
 						<img class="char_instruction_img" src="wall.png"></img>
-							<span class="right_arrow"></span>
+							<span class="right_arrow">></span>
 						<img class="char_instruction_img" src="floor.png"></img>
 					</div>
 				</div>
 				<div id="char_instruction_div_4" class="char_instruction_div">
+					<img class="char_instruction_img" src="fighter.png"></img>
+					<br>
 					Can kill zombies.
 					<div>
 						<img class="char_instruction_img" src="zombie.png"></img>
@@ -168,7 +176,13 @@
 						<span id="zombie_x">X</span>
 					</div>
 				</div>
-				<div id="char_instruction_div_5" class="char_instruction_div">Does nothing special.</div>
+				<div id="char_instruction_div_5" class="char_instruction_div">
+					<img class="char_instruction_img" src="nothing.png"></img>
+					<br>
+					Does nothing special.
+				</div>
+			</div>
+			<div id="char_instructions" class="in_game">
 				<div id="choose_char_div">
 					Choose a character
 					<div id="arrow">V</div>
