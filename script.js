@@ -72,9 +72,8 @@ function changeVol(){
 	}
 }
 function mainMenu(ctx){
-	ctx.clearRect(0,0,800,600);
-	var img=document.getElementById("tytuu");
-	ctx.drawImage(img,200,10);
+	ctx.clearRect(0, 0, WIDTH, HEIGHT);
+	drawTitleText(ctx);
 	$(".main_menu").show();
 	$("#volume_control").removeClass("volume_control_in_level_editor");
 	$(".controls").show();

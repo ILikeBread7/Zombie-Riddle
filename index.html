@@ -13,12 +13,12 @@
 	</head>
 	<body onload="init();">
 		<div id="enable_sound">
-			<p style="margin-top:265px;">Enable sound?</p>
+			<p style="margin-top:325px;">Enable sound?</p>
 			<button class="enable_sound" onclick="enableSound();">Yes</button>
 			<button class="enable_sound" onclick="disableSound();">No</button>
 		</div>
 
-		<canvas id="canv" width="800" height="600"></canvas>
+		<canvas id="canv" width="1280" height="720"></canvas>
 		
 		<div id="loading">
 			<p style="margin-top:295px;">Loading...</p>
@@ -155,7 +155,7 @@
 					Can punch through brick walls to remove them.
 					<div>
 						<img class="char_instruction_img" src="wall.png"></img>
-							<span class="right_arrow">></span>
+							<span class="right_arrow"></span>
 						<img class="char_instruction_img" src="floor.png"></img>
 					</div>
 				</div>
@@ -187,13 +187,6 @@
 					<button class="char" id="walls_game" onclick="this.blur(); sendStickman(2);" onmouseover="showCharInstructions(2);" onmouseout="hideCharInstructions();">
 						<div class="button_div" id="walls_div">0</div>
 					</button>
-					
-					<!--
-					<button class="char" id="thrower_game" onclick="this.blur(); sendStickman(3);">
-						<div class="button_div" id="thrower_div">0</div>
-					</button>
-					-->
-					
 					<button class="char" id="fighter_game" onclick="this.blur(); sendStickman(4);" onmouseover="showCharInstructions(4);" onmouseout="hideCharInstructions();">
 						<div class="button_div" id="fighter_div">0</div>
 					</button>

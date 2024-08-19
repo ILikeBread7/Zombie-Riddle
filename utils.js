@@ -1,3 +1,6 @@
+const WIDTH = 1280;
+const HEIGHT = 720;
+
 function drawRotatedImage(ctx,img,x,y,degree){
 	ctx.save();
 	ctx.translate(x+img.width/2,y+img.height/2);
@@ -8,7 +11,7 @@ function drawRotatedImage(ctx,img,x,y,degree){
 
 function fill(ctx,color){
 	ctx.fillStyle=color;
-	ctx.fillRect(0,0,800,600);
+	ctx.fillRect(0, 0, WIDTH, HEIGHT);
 }
 
 function exportedMapCode(){
@@ -16,7 +19,6 @@ function exportedMapCode(){
 	s+=$("#bridges_input").val()+";";
 	s+=$("#switches_input").val()+";";
 	s+=$("#walls_input").val()+";";
-	//s+=$("#thrower_input").val()+";";
 	s+="0;";
 	s+=$("#fighter_input").val()+";";
 	s+=$("#nothing_input").val()+";";
@@ -78,6 +80,11 @@ function segmentCircleIntersect(ax,ay,bx,by,cx,cy,r){
 		return true;
 
 	return false;
+}
+
+function drawTitleText(ctx) {
+	const img = document.getElementById("tytuu");
+	ctx.drawImage(img, 410, 10);
 }
 
 const bgMusicTitle = 'POL-antique-market-short.mp3';
