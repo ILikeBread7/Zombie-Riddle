@@ -351,7 +351,7 @@ function levelEditAction(){
 	var ctx=canv.getContext("2d");
 	fill(ctx,"#eeeeee");
 	$("#volume_control").addClass("volume_control_in_level_editor");
-	$("#go_back").css("top", "555px");
+	$("#go_back").css("top", "675px");
 	$("#go_back").show();
 	$(".level_editor").show();
 	editorMapSize();
