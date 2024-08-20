@@ -7,6 +7,8 @@ var choosing_doors;
 var editor_map_width;
 var editor_map_height;
 
+let editorMessages;
+
 var sound_enabled = false;
 var initialized = false;
 
@@ -106,6 +108,7 @@ async function startLevel(num){
 function adjustMap(w,h){
 	editor_map=[];
 	editor_switches=[];
+	editorMessages = [];
 	for(var x=0;x<w;x++){
 		editor_map[x]=[];
 		for(var y=0;y<h;y++)
@@ -209,6 +212,7 @@ function importMap(){
 	$("#height").val(s[1]);
 	$('#apply_wh').click();
 	editor_switches=[];
+	editorMessages = [];
 	$("#bridges_input").val(s[3]);
 	$("#switches_input").val(s[4]);
 	$("#walls_input").val(s[5]);
@@ -219,25 +223,29 @@ function importMap(){
 	for(var i=9;i<s.length-1;i++)
 		putTile(s[i]);
 }
-function getNum(tile){
-	if(tile=="floor")
-		return 0;
-	if(tile=="start_point")
-		return 1;
-	if(tile=="finish_point")
-		return 2;
-	if(tile=="open_door")
-		return 3;
-	if(tile=="wall")
-		return 10;
-	if(tile=="steel_wall")
-		return 11;
-	if(tile=="switch")
-		return 12;
-	if(tile=="door")
-		return 13;
-	if(tile=="hole")
-		return 14;
+function getNum(tile) {
+    switch(tile) {
+        case 'floor':
+            return 0;
+        case 'start_point':
+            return 1;
+        case 'finish_point':
+            return 2;
+        case 'open_door':
+            return 3;
+		case 'questionmark':
+			return 5;
+        case 'wall':
+            return 10;
+        case 'steel_wall':
+            return 11;
+        case 'switch':
+            return 12;
+        case 'door':
+            return 13;
+        case 'hole':
+            return 14;
+    }
 }
 function stopChoosingDoors(correct){
 	if(choosing_doors==true){
@@ -257,6 +265,26 @@ function chooseDoors(x,y){
 	choosing_doors=true;
 	$("#chosen_doors").show();
 }
+
+function startWritingMessage(x, y) {
+	document.getElementById('editor_text_message').show();
+	const message = { x, y };
+	editorMessages.push(message);
+}
+
+function confirmMessage() {
+	const messageEditor = document.getElementById('editor_text');
+	const message = messageEditor.value;
+	messageEditor.value = '';
+	document.getElementById('editor_text_message').hide();
+	if (message) {
+		const currentMessage = editorMessages[editorMessages.length - 1];
+		currentMessage.message = message;
+	} else {
+		editorMessages.pop();
+	}
+}
+
 function deletePreviousSwitch(x,y){
 	for(var i=0;i<editor_switches.length;i++){
 		if(editor_switches[i][0][0]==x && editor_switches[i][0][1]==y){
@@ -265,10 +293,21 @@ function deletePreviousSwitch(x,y){
 		}
 	}
 }
+
+function deletePreviousMessage(x, y) {
+	for (let i = 0; i < editorMessages.length; i++) {
+		const message = editorMessages[i];
+		if (message.x === x && message.y === y) {
+			editorMessages.splice(i, 1);
+			return;
+		}
+	}
+}
+
 function editorClick(event){
 	var rect=document.getElementById("editor_canv").getBoundingClientRect();
-	var x=Math.floor((event.pageX-rect.left)/40);
-	var y=Math.floor((event.pageY-rect.top)/40);
+	let x = Math.floor((event.pageX - (rect.left + window.scrollX)) / 40);
+	let y = Math.floor((event.pageY - (rect.top + window.scrollY)) / 40);
 	if(choosing_doors){
 		var last=editor_switches.length-1;
 		var arr=[];
@@ -279,23 +318,38 @@ function editorClick(event){
 	}
 	else{
 		var tile=getNum(editor_tile);
-		if(tile==12)
-			deletePreviousSwitch(x,y);
+
+		switch (editor_tile) {
+			case 'switch':
+				deletePreviousSwitch(x, y);
+			break;
+			case 'questionmark':
+				deletePreviousMessage(x, y);
+			break;
+		}
+
 		editor_map[x][y]=tile;
 		var ctx=document.getElementById("editor_canv").getContext("2d");
 		var img=document.getElementById(editor_tile+"_img");
 		ctx.drawImage(img,x*40,y*40);
 		last_click_x=x;
 		last_click_y=y;
-		if(editor_tile=="switch")
-			chooseDoors(x,y);
+
+		switch (editor_tile) {
+			case 'switch':
+				chooseDoors(x, y);
+			break;
+			case 'questionmark':
+				startWritingMessage(x, y);
+			break;
+		}
 	}
 }
 function editorUnclick(event){
 	if(!choosing_doors){
 		var rect=document.getElementById("editor_canv").getBoundingClientRect();
-		var x=Math.floor((event.pageX-rect.left)/40);
-		var y=Math.floor((event.pageY-rect.top)/40);
+		let x = Math.floor((event.pageX - (rect.left + window.scrollX)) / 40);
+		let y = Math.floor((event.pageY - (rect.top + window.scrollY)) / 40);
 		var ctx=document.getElementById("editor_canv").getContext("2d");
 		var img=document.getElementById(editor_tile+"_img");
 		if(x<last_click_x){
@@ -346,6 +400,7 @@ function levelEditAction(){
 	$(".level_editor").show();
 	editorMapSize();
 	$("#chosen_doors").hide();
+	document.getElementById('editor_text_message').hide();
 	playMusic(bgMusicEditor);
 }
 function goBackInstr(){

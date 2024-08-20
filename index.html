@@ -68,6 +68,7 @@
 				<button id="switch" class="editor_tile" onclick="this.blur(); tileSelected('switch');"></button>
 				<button id="door" class="editor_tile" onclick="this.blur(); tileSelected('door');"></button>
 				<button id="open_door" class="editor_tile" onclick="this.blur(); tileSelected('open_door');"></button>
+				<button id="questionmark" class="editor_tile" onclick="this.blur(); tileSelected('questionmark');"></button>
 			</div>
 			<div id="import_export" class="level_editor">
 				<button id="export" onclick="exportMap();">Export map</button>
@@ -99,6 +100,11 @@
 				<div class="editor_char" id="nothing">
 					<input class="char_number" id="nothing_input" type="number" value ="0" min="0" max="99"></input>
 				</div>
+			</div>
+			<div id="editor_text_message" class="level_editor">
+				<textarea id="editor_text"></textarea>
+				<br>
+				<button id="editor_text_confirm" onclick="confirmMessage();">Confirm</button>
 			</div>
 			<div id="selected_tile" class="level_editor"></div>
 			<div id="chosen_doors"class="level_editor">
@@ -220,6 +226,7 @@
 			<img id="door_img" src="door.png"></img>
 			<img id="hole_img" src="hole.png"></img>
 			<img id="bridge_img" src="bridge.png"></img>
+			<img id="questionmark_img" src="questionmark.png"></img>
 			
 			<img id="player_0_img" src="player_0.png"></img>
 			<img id="player_1_img" src="player_1.png"></img>
