@@ -273,7 +273,7 @@ function showTile(ctx,map,x,y){
 	const targetTile = getTile(targetX, targetY);
 	if(x>=0 && x<map_width && y>=0 && y<map_height){
 		var img=document.getElementById(getTileName(map[x][y])+"_img");
-		ctx.drawImage(img,Math.floor(WIDTH / 2)+(x-ch.getRealX())*40,Math.floor(HEIGHT / 2)+(y-ch.getRealY())*40);
+		ctx.drawImage(img, PLAYER_ABSOLUTE_X + (x-ch.getRealX())*40, PLAYER_ABSOLUTE_Y + (y-ch.getRealY())*40);
 		if (player.isInPlay() && [0, 1, 2].includes(player.getType()) && targetX == x && targetY == y) {
 			ctx.beginPath();
 			if (
