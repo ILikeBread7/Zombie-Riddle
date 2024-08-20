@@ -126,14 +126,7 @@ function movingChar(){
 			return Math.sqrt(xDist*xDist+yDist*yDist);
 		},
 		getAngleToDist:function(x,y){
-			var c=(Math.sqrt(x*x+y*y));
-			if(c==0)
-				return 0;
-			var sinAlpha=x/c;
-			if(y<=0)
-				return Math.asin(sinAlpha);
-			else
-				return Math.PI-Math.asin(sinAlpha);
+			return Math.atan2(y, x) + Math.PI / 2;
 		},
 		getAngleTo:function(ch){
 			var x=ch.getCenterX()-this.getCenterX();
