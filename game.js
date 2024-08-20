@@ -27,6 +27,16 @@ var PLAYER_ABSOLUTE_Y = Math.floor(HEIGHT / 2);
 
 var swordAnimations = [];
 
+const CLEARED_STORAGE_KEY = 'cleared';
+
+function readCleared() {
+	return Number(localStorage.getItem(CLEARED_STORAGE_KEY) || 0);
+}
+
+function saveCleared(cleared) {
+	localStorage.setItem(CLEARED_STORAGE_KEY, cleared);
+}
+
 function createZombies(){
 	var arr=[];
 	
@@ -491,9 +501,7 @@ function actions(interval,ctx,mapNumber,map,map_code){
 				endGame=true;
 				if(mapNumber>=cleared){
 					cleared=mapNumber+1;
-					var date=new Date();
-					date.setYear(date.getYear()+10);
-					document.cookie='cleared='+cleared+'; expires='+date.toUTCString()+'; max-age='+60*60*24*365*60+';';
+					saveCleared(cleared);
 					setClearedLevels();
 				}
 				if(mapNumber>=0 && mapNumber<levels-1)

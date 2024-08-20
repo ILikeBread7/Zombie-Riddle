@@ -56,16 +56,6 @@ async function countLevels(){
 	});
 	return result;
 }
-function readCookie(name,cookies){
-	var c=cookies.split(';');
-	for(var i=0;i<c.length;i++){
-		if(c[i].length>=name.length && c[i].substring(0,7)==name){
-			var val=c[i].split('=');
-			return val[1];
-		}
-	}
-	return 0;
-}
 function changeVol(){
 	const volume = document.getElementById("volume").value;
 	audioHandler.changeVolume(volume);
@@ -381,8 +371,7 @@ async function init(){
 	document.addEventListener("keyup",keyListener);
 	canv.addEventListener("click",gameClickListener);
 	var ctx=canv.getContext("2d");
-	var cookies=document.cookie;
-	cleared=readCookie("cleared",cookies);
+	cleared = readCleared();
 	levels = await countLevels();
 	editor_tile="floor";
 	addLevels(levels);
