@@ -12,6 +12,7 @@ var map_width,map_height;
 var switches;
 var map_code;
 var map;
+let messages;
 
 var backup_map;
 var backup_zombies;
@@ -425,10 +426,34 @@ function playFrame(ctx){
 			player.setInPlay(false);
 		else{
 			showPlayer(ctx);
+			showSwordAnimations(ctx);
 			if(playerOnFinish(player)){
 				$("#undo_button").attr("disabled",true);
 				undoGame=false;
 				return true;
+			}
+
+			const x = ch.getX();
+			const y = ch.getY();
+			for (let tileX = x; tileX <= x + 1; tileX++) {
+				for (let tileY = y; tileY <= y + 1; tileY++) {
+					const currentTile = getTile(tileX, tileY);
+					if (currentTile && currentTile === 5) {
+						const message = messages.find(m => m.x === tileX && m.y === tileY);
+						if (message) {
+							const text = message.message.split('\n');
+							const lineHeight = 30;
+							const boxHeight = text.length * lineHeight;
+							ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+							ctx.fillRect(0, 0, WIDTH, boxHeight);
+							ctx.fillStyle = '#fff';
+							ctx.font = '20px Trebuchet MS, Helvetica, sans-serif';
+							for (let i = 0; i < text.length; i++) {
+								ctx.fillText(text[i], 0, 20 + lineHeight * i + 1);
+							}
+						}
+					}
+				}
 			}
 		}
 	}
@@ -457,7 +482,6 @@ function playFrame(ctx){
 			player.moveTowardsStart();
 		player.incTimer();
 	}
-	showSwordAnimations(ctx);
 	
 	return false;
 }
@@ -481,6 +505,7 @@ function actions(interval,ctx,mapNumber,map,map_code){
 			fill(ctx,"#eeeeee");
 			$(".level_editor").show();
 			$("#chosen_doors").hide();
+			document.getElementById('editor_text_message').hide();
 			playMusic(bgMusicEditor);
 		}
 		else{
@@ -562,10 +587,20 @@ function putTileOnMap(tile,map,w){
 	var x,y;
 	y=Math.floor(tile[0]/w);
 	x=tile[0]%w;
-	map[x][y]=tile[1];
-	if(tile[1]==12)
+
+	const tileType = Number(tile[1]);
+	map[x][y] = tileType;
+	if (tileType === 12) {
 		handleSwitchAdding(tile,x,y,w);
+	} else if (tileType === 5) {
+		handleMessageAdding(atob(tile[2]), x, y);
+	}
 }
+
+function handleMessageAdding(message, x, y) {
+	messages.push({ x, y, message });
+}
+
 function putStartOnMap(map,num,map_width){
 	var x=Math.floor(num%map_width);
 	var y=Math.floor(num/map_width);
@@ -588,6 +623,7 @@ function readData(map_code){
 	}
 	putStartOnMap(map,s[2],map_width);
 	switches=[];
+	messages = [];
 	for(var i=9;i<s.length-1;i++)
 		putTileOnMap(s[i].split(","),map,map_width);
 	return map;

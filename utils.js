@@ -38,28 +38,34 @@ async function readMap(mapNumber){
 	});
 	return map;
 }
-function getTileName(tile){
-	if(tile==0)
-		return "floor";
-	if(tile==1)
-		return "start_point";
-	if(tile==2)
-		return "finish_point";
-	if(tile==3)
-		return "open_door";
-	if(tile==4)
-		return "bridge";
-	if(tile==10)
-		return "wall";
-	if(tile==11)
-		return "steel_wall";
-	if(tile==12)
-		return "switch";
-	if(tile==13)
-		return "door";
-	if(tile==14)
-		return "hole";
+
+function getTileName(tile) {
+	switch(tile) {
+		case 0:
+			return 'floor';
+		case 1:
+			return 'start_point';
+		case 2:
+			return 'finish_point';
+		case 3:
+			return 'open_door';
+		case 4:
+			return 'bridge';
+		case 5:
+			return 'questionmark';
+		case 10:
+			return 'wall';
+		case 11:
+			return 'steel_wall';
+		case 12:
+			return 'switch';
+		case 13:
+			return 'door';
+		case 14:
+			return 'hole';
+	}
 }
+
 function dist(x1,y1,x2,y2){
 	var dx=x1-x2;
 	var dy=y1-y2;

@@ -149,20 +149,33 @@ function findLinkedDoors(x,y){
 	}
 	return "";
 }
-function encodeTiles(){
-	var result="";
-	for(var x=0;x<editor_map_width;x++)
-		for(var y=0;y<editor_map_height;y++){
-			var tile=editor_map[x][y];
-			if(tile==12){
-				result+=(x+y*editor_map_width)+","+tile+","+findLinkedDoors(x,y)+";";
+
+function encodeTiles() {
+	let result = '';
+	for (var x = 0; x < editor_map_width; x++)
+		for (var y = 0; y < editor_map_height; y++) {
+			var tile = editor_map[x][y];
+			if (tile === 12) {
+				result += (x + y * editor_map_width) + ',' + tile + ',' + findLinkedDoors(x, y) + ';';
+			} else if (tile > 1) {
+				result += (x + y * editor_map_width) + ',' + tile;
+				if (tile === 5) {
+					result += (',' + btoa(findMessage(x, y)));
+				}
+				result += ';';
 			}
-			else
-				if(tile>1)
-					result+=(x+y*editor_map_width)+","+tile+";";
 		}
 	return result;
 }
+
+function findMessage(x, y) {
+	const message = editorMessages.find(m => m.x === x && m.y === y);
+	if (message) {
+		return message.message;
+	}
+	return '';
+}
+
 function exportMap(){
 	$("#map_code").val(exportedMapCode());
 }
@@ -195,17 +208,28 @@ function addSwitch(data){
 	editor_switches.push(switchArr);
 }
 function putTile(tile){
-	var data=tile.split(",");
+	var data = tile.split(",").map((value, index) => index < 2 ? Number(value) : value);
 	var ctx=document.getElementById("editor_canv").getContext("2d");
 	var x,y,img;
 	x=data[0]%editor_map_width;
 	y=Math.floor(data[0]/editor_map_width);
 	editor_map[x][y]=data[1];
-	if(data[1]==12)
+	if (data[1] === 12) {
 		addSwitch(data);
+	}
+	if (data[1] === 5) {
+		addMessage(data);
+	}
 	img=document.getElementById(getTileName(data[1])+"_img");
 	ctx.drawImage(img,x*40,y*40);
 }
+
+function addMessage(data) {
+	const x = data[0] % editor_map_width;
+	const y = Math.floor(data[0] / editor_map_width);
+	editorMessages.push({ x, y, message: atob(data[2]) });
+}
+
 function importMap(){
 	var s=$("#map_code").val().split(";");
 	$("#width").val(s[0]);
@@ -223,30 +247,32 @@ function importMap(){
 	for(var i=9;i<s.length-1;i++)
 		putTile(s[i]);
 }
+
 function getNum(tile) {
-    switch(tile) {
-        case 'floor':
-            return 0;
-        case 'start_point':
-            return 1;
-        case 'finish_point':
-            return 2;
-        case 'open_door':
-            return 3;
+	switch(tile) {
+		case 'floor':
+			return 0;
+		case 'start_point':
+			return 1;
+		case 'finish_point':
+			return 2;
+		case 'open_door':
+			return 3;
 		case 'questionmark':
 			return 5;
-        case 'wall':
-            return 10;
-        case 'steel_wall':
-            return 11;
-        case 'switch':
-            return 12;
-        case 'door':
-            return 13;
-        case 'hole':
-            return 14;
-    }
+		case 'wall':
+			return 10;
+		case 'steel_wall':
+			return 11;
+		case 'switch':
+			return 12;
+		case 'door':
+			return 13;
+		case 'hole':
+			return 14;
+	}
 }
+
 function stopChoosingDoors(correct){
 	if(choosing_doors==true){
 		choosing_doors=false;
