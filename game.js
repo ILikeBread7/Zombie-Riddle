@@ -446,7 +446,7 @@ function playFrame(ctx){
 							const text = message.message.split('\n');
 							const lineHeight = 30;
 							const boxHeight = text.length * lineHeight;
-							ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+							ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
 							ctx.fillRect(0, 0, WIDTH, boxHeight);
 							ctx.fillStyle = '#fff';
 							ctx.font = '20px Trebuchet MS, Helvetica, sans-serif';
