@@ -1,5 +1,6 @@
 const WIDTH = 1280;
 const HEIGHT = 720;
+const TILE_WH = 40;
 
 const Screen = {
 	top: 0,

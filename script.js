@@ -124,8 +124,8 @@ function editorMapSize(){
 	if (w == editor_map_width && h == editor_map_height) {
 		return;
 	}
-	editCanv.width=w*40;
-	editCanv.height=h*40;
+	editCanv.width=w*TILE_WH;
+	editCanv.height=h*TILE_WH;
 	adjustMap(w,h);
 }
 function findStart(){
@@ -186,7 +186,7 @@ function putStart(start){
 	y=Math.floor(start/editor_map_width);
 	editor_map[x][y]=1;
 	img=document.getElementById("start_point_img");
-	ctx.drawImage(img,x*40,y*40);
+	ctx.drawImage(img,x*TILE_WH,y*TILE_WH);
 }
 function addSwitch(data){
 	var switchArr=[];
@@ -221,7 +221,7 @@ function putTile(tile){
 		addMessage(data);
 	}
 	img=document.getElementById(getTileName(data[1])+"_img");
-	ctx.drawImage(img,x*40,y*40);
+	ctx.drawImage(img,x*TILE_WH,y*TILE_WH);
 }
 
 function addMessage(data) {
@@ -332,8 +332,8 @@ function deletePreviousMessage(x, y) {
 
 function editorClick(event){
 	var rect=document.getElementById("editor_canv").getBoundingClientRect();
-	let x = Math.floor((event.pageX - (rect.left + window.scrollX)) / Screen.factor / 40);
-	let y = Math.floor((event.pageY - (rect.top + window.scrollY)) / Screen.factor / 40);
+	let x = Math.floor((event.pageX - (rect.left + window.scrollX)) / Screen.factor / TILE_WH);
+	let y = Math.floor((event.pageY - (rect.top + window.scrollY)) / Screen.factor / TILE_WH);
 	if(choosing_doors){
 		var last=editor_switches.length-1;
 		var arr=[];
@@ -357,7 +357,7 @@ function editorClick(event){
 		editor_map[x][y]=tile;
 		var ctx=document.getElementById("editor_canv").getContext("2d");
 		var img=document.getElementById(editor_tile+"_img");
-		ctx.drawImage(img,x*40,y*40);
+		ctx.drawImage(img,x*TILE_WH,y*TILE_WH);
 		last_click_x=x;
 		last_click_y=y;
 
@@ -374,8 +374,8 @@ function editorClick(event){
 function editorUnclick(event){
 	if(!choosing_doors){
 		var rect=document.getElementById("editor_canv").getBoundingClientRect();
-		let x = Math.floor((event.pageX - (rect.left + window.scrollX)) / Screen.factor / 40);
-		let y = Math.floor((event.pageY - (rect.top + window.scrollY)) / Screen.factor / 40);
+		let x = Math.floor((event.pageX - (rect.left + window.scrollX)) / Screen.factor / TILE_WH);
+		let y = Math.floor((event.pageY - (rect.top + window.scrollY)) / Screen.factor / TILE_WH);
 		var ctx=document.getElementById("editor_canv").getContext("2d");
 		var img=document.getElementById(editor_tile+"_img");
 		if(x<last_click_x){
@@ -391,7 +391,7 @@ function editorUnclick(event){
 		var tile=getNum(editor_tile);
 		for(var i=last_click_x;i<=x;i++)
 			for(var j=last_click_y;j<=y;j++){
-				ctx.drawImage(img,i*40,j*40);
+				ctx.drawImage(img,i*TILE_WH,j*TILE_WH);
 				editor_map[i][j]=tile;
 			}
 	}

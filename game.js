@@ -97,7 +97,7 @@ function createZombies(){
 							timer++;
 						},
 						searchPlayer:function(ch){
-							if(character.getDistance(ch)<4*40){
+							if(character.getDistance(ch)<4*TILE_WH){
 								lock_on_player=true;
 								new_angle=(character.getAngleTo(ch)+4*Math.PI)%(2*Math.PI);
 								setAngleDir();
@@ -146,12 +146,12 @@ var player=function(){
 	var in_play=false;
 	var scrolling=false;
 	var stickman_type=0;
-	var sword_range=40;
+	var sword_range=TILE_WH;
 	var timer_limit=20;
 	var timer=timer_limit;
 	
 	var putAtStart=function(){
-		character.putAtXY(start_x*40,start_y*40);
+		character.putAtXY(start_x*TILE_WH,start_y*TILE_WH);
 	};
 	
 	return{
@@ -274,8 +274,8 @@ function showTile(ctx,map,x,y){
 	const targetTile = getTile(targetX, targetY);
 	if(x>=0 && x<map_width && y>=0 && y<map_height){
 		var img=document.getElementById(getTileName(map[x][y])+"_img");
-		const drawX = Math.floor(PLAYER_ABSOLUTE_X + (x - ch.getRealX()) * 40);
-		const drawY = Math.floor(PLAYER_ABSOLUTE_Y + (y - ch.getRealY()) * 40);
+		const drawX = Math.floor(PLAYER_ABSOLUTE_X + (x - ch.getRealX()) * TILE_WH);
+		const drawY = Math.floor(PLAYER_ABSOLUTE_Y + (y - ch.getRealY()) * TILE_WH);
 		ctx.drawImage(img, drawX, drawY);
 		if (player.isInPlay() && [0, 1, 2].includes(player.getType()) && targetX == x && targetY == y) {
 			ctx.beginPath();
@@ -289,7 +289,7 @@ function showTile(ctx,map,x,y){
 				ctx.strokeStyle = '#f00';
 			}
 			ctx.lineWidth = 3;
-			ctx.strokeRect(drawX, drawY, 40, 40);
+			ctx.strokeRect(drawX, drawY, TILE_WH, TILE_WH);
 		}
 	}
 }
@@ -346,10 +346,10 @@ function collision(character,map){
 	var r=character.getRadius();
 	var x=character.getTmpCenterX();
 	var y=character.getTmpCenterY();
-	var x_left=Math.floor((x-r)/40);
-	var x_right=Math.floor((x+r)/40);
-	var y_up=Math.floor((y-r)/40);
-	var y_down=Math.floor((y+r)/40);
+	var x_left=Math.floor((x-r)/TILE_WH);
+	var x_right=Math.floor((x+r)/TILE_WH);
+	var y_up=Math.floor((y-r)/TILE_WH);
+	var y_down=Math.floor((y+r)/TILE_WH);
 	
 	var squares=[];
 	squares.push(getCollidingSquare(x_left,y_up));
@@ -365,8 +365,8 @@ function collision(character,map){
 
 function playerOnFinish(player){
 	var ch=player.getMovingChar();
-	var x=ch.getCenterX()/40;
-	var y=ch.getCenterY()/40;
+	var x=ch.getCenterX()/TILE_WH;
+	var y=ch.getCenterY()/TILE_WH;
 	
 	if(getTile(Math.floor(x),Math.floor(y))!=2)
 		return false;
@@ -435,25 +435,21 @@ function playFrame(ctx){
 				return true;
 			}
 
-			const x = ch.getX();
-			const y = ch.getY();
-			for (let tileX = x; tileX <= x + 1; tileX++) {
-				for (let tileY = y; tileY <= y + 1; tileY++) {
-					const currentTile = getTile(tileX, tileY);
-					if (currentTile && currentTile === 5) {
-						const message = messages.find(m => m.x === tileX && m.y === tileY);
-						if (message) {
-							const text = message.message.split('\n');
-							const lineHeight = 30;
-							const boxHeight = text.length * lineHeight;
-							ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-							ctx.fillRect(0, 0, WIDTH, boxHeight);
-							ctx.fillStyle = '#fff';
-							ctx.font = '20px Trebuchet MS, Helvetica, sans-serif';
-							for (let i = 0; i < text.length; i++) {
-								ctx.fillText(text[i], 0, 20 + lineHeight * i + 1);
-							}
-						}
+			const tileX = Math.floor(ch.getCenterX() / TILE_WH);
+			const tileY = Math.floor(ch.getCenterY() / TILE_WH);
+			const currentTile = getTile(tileX, tileY);
+			if (currentTile && currentTile === 5) {
+				const message = messages.find(m => m.x === tileX && m.y === tileY);
+				if (message) {
+					const text = message.message.split('\n');
+					const lineHeight = 30;
+					const boxHeight = text.length * lineHeight;
+					ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+					ctx.fillRect(0, 0, WIDTH, boxHeight);
+					ctx.fillStyle = '#fff';
+					ctx.font = '20px Trebuchet MS, Helvetica, sans-serif';
+					for (let i = 0; i < text.length; i++) {
+						ctx.fillText(text[i], 0, 20 + lineHeight * i + 1);
 					}
 				}
 			}

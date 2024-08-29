@@ -5,7 +5,7 @@ function distToVertex(point,x,y){
 }
 
 function createSquare(x,y){
-	var pUL=[x*40,y*40],pUR=[x*40+40,y*40],pBL=[x*40,y*40+40],pBR=[x*40+40,y*40+40];
+	var pUL=[x*TILE_WH,y*TILE_WH],pUR=[x*TILE_WH+TILE_WH,y*TILE_WH],pBL=[x*TILE_WH,y*TILE_WH+TILE_WH],pBR=[x*TILE_WH+TILE_WH,y*TILE_WH+TILE_WH];
 	
 	function checkVertices(movable,x,y,r){
 		if(distToVertex(pUL,x,y)<r){

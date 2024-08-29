@@ -18,16 +18,16 @@ function movingChar(){
 			speed=val;
 		},
 		getX:function(){
-			return Math.floor(player_x/40);
+			return Math.floor(player_x/TILE_WH);
 		},
 		getY:function(){
-			return Math.floor(player_y/40);
+			return Math.floor(player_y/TILE_WH);
 		},
 		getRealX:function(){
-			return player_x/40;
+			return player_x/TILE_WH;
 		},
 		getRealY:function(){
-			return player_y/40;
+			return player_y/TILE_WH;
 		},
 		getAbsoluteX:function(){
 			return player_x;
@@ -90,35 +90,35 @@ function movingChar(){
 			return this.getRealY()+0.5-0.85*Math.cos(player_angle);
 		},
 		moveTowards:function(x,y,scroll_speed){
-			if(player_x/40<x)
+			if(player_x/TILE_WH<x)
 				player_x+=scroll_speed;
 			else
 				player_x-=scroll_speed;
-			if(Math.abs(player_x-x*40)<=scroll_speed)
-				player_x=x*40;
+			if(Math.abs(player_x-x*TILE_WH)<=scroll_speed)
+				player_x=x*TILE_WH;
 			
-			if(player_y/40<y)
+			if(player_y/TILE_WH<y)
 				player_y+=scroll_speed;
 			else
 				player_y-=scroll_speed;
-			if(Math.abs(player_y-y*40)<=scroll_speed)
-				player_y=y*40;
+			if(Math.abs(player_y-y*TILE_WH)<=scroll_speed)
+				player_y=y*TILE_WH;
 		},
 		moveHorizontallyTo:function(x,scroll_speed){
-			if(player_x/40<x)
+			if(player_x/TILE_WH<x)
 				player_x+=scroll_speed;
 			else
 				player_x-=scroll_speed;
-			if(Math.abs(player_x-x*40)<=scroll_speed)
-				player_x=x*40;
+			if(Math.abs(player_x-x*TILE_WH)<=scroll_speed)
+				player_x=x*TILE_WH;
 		},
 		moveVerticallyTo:function(y,scroll_speed){
-			if(player_y/40<y)
+			if(player_y/TILE_WH<y)
 				player_y+=scroll_speed;
 			else
 				player_y-=scroll_speed;
-			if(Math.abs(player_y-y*40)<=scroll_speed)
-				player_y=y*40;
+			if(Math.abs(player_y-y*TILE_WH)<=scroll_speed)
+				player_y=y*TILE_WH;
 		},
 		getDistance:function(ch){
 			var xDist=this.getCenterX()-ch.getCenterX();
