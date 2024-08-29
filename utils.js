@@ -1,6 +1,20 @@
 const WIDTH = 1280;
 const HEIGHT = 720;
 
+const Screen = {
+	top: 0,
+	left: 0,
+	factor: 1,
+
+	scaleX: function(x) {
+		return Math.floor((x - this.left) / this.factor);
+	},
+
+	scaleY: function(y) {
+		return Math.floor((y - this.top) / this.factor);
+	}
+}
+
 function drawRotatedImage(ctx,img,x,y,degree){
 	ctx.save();
 	ctx.translate(x+img.width/2,y+img.height/2);

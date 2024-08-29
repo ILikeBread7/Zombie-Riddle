@@ -332,8 +332,8 @@ function deletePreviousMessage(x, y) {
 
 function editorClick(event){
 	var rect=document.getElementById("editor_canv").getBoundingClientRect();
-	let x = Math.floor((event.pageX - (rect.left + window.scrollX)) / 40);
-	let y = Math.floor((event.pageY - (rect.top + window.scrollY)) / 40);
+	let x = Math.floor((event.pageX - (rect.left + window.scrollX)) / Screen.factor / 40);
+	let y = Math.floor((event.pageY - (rect.top + window.scrollY)) / Screen.factor / 40);
 	if(choosing_doors){
 		var last=editor_switches.length-1;
 		var arr=[];
@@ -374,8 +374,8 @@ function editorClick(event){
 function editorUnclick(event){
 	if(!choosing_doors){
 		var rect=document.getElementById("editor_canv").getBoundingClientRect();
-		let x = Math.floor((event.pageX - (rect.left + window.scrollX)) / 40);
-		let y = Math.floor((event.pageY - (rect.top + window.scrollY)) / 40);
+		let x = Math.floor((event.pageX - (rect.left + window.scrollX)) / Screen.factor / 40);
+		let y = Math.floor((event.pageY - (rect.top + window.scrollY)) / Screen.factor / 40);
 		var ctx=document.getElementById("editor_canv").getContext("2d");
 		var img=document.getElementById(editor_tile+"_img");
 		if(x<last_click_x){
@@ -446,6 +446,15 @@ function addLevels(levels){
 	}
 }
 async function init(){
+	document.getElementById('fullscreen').addEventListener('click', e => {
+		e.target.blur();
+		if (document.fullscreenElement) {
+			document.exitFullscreen();
+		} else {
+			document.body.requestFullscreen();
+		}
+	});
+
 	var canv=document.getElementById("canv");
 	canv.addEventListener("mousemove",mouseMoveListener);
 	document.addEventListener("keydown",keyListener);

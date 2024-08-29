@@ -235,8 +235,8 @@ function getTile(x,y){
 
 function mouseMoveListener(event){
 	var rect=document.getElementById("editor_canv").getBoundingClientRect();
-	mouse_x=event.pageX-rect.left;
-	mouse_y=event.pageY-rect.top;
+	mouse_x = Screen.scaleX(event.pageX - rect.left);
+	mouse_y = Screen.scaleY(event.pageY - rect.top);
 	var ch=player.getMovingChar();
 }
 function keyListener(event){
