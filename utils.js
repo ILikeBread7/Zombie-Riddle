@@ -105,7 +105,7 @@ function segmentCircleIntersect(ax,ay,bx,by,cx,cy,r){
 
 function drawTitleText(ctx) {
 	const img = document.getElementById("tytuu");
-	ctx.drawImage(img, 410, 10);
+	ctx.drawImage(img, Math.floor((WIDTH - 401) / 2), 10);
 }
 
 const bgMusicTitle = 'POL-antique-market-short.mp3';
