@@ -19,8 +19,8 @@ a{
 }
 p#signature{
 	position:absolute;
-	top: 660px;
-	left: 1040px;
+	bottom: 0px;
+	right: 0px;
 	font-size:12px;
 	font-weight:900;
 	color:#ffffff;
